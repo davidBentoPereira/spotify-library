@@ -75,6 +75,8 @@ group :development do
   gem "rubocop-rails", "~> 2.21"
   # A rubocop add-on allowing to disable some ruby syntaxe
   gem "rubocop-disable_syntax", "~> 0.1.0"
+  # Add a comment summarizing the current schema to the top or bottom of each of your
+  gem "annotate", "~> 3.2"
 end
 
 group :test do
