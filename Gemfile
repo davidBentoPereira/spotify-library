@@ -56,6 +56,10 @@ group :development, :test do
   gem "debug", platforms: %i[mri mingw x64_mingw]
   # Unit test framework
   gem "rspec-rails", "~> 6.0"
+  # factory_bot is a fixtures replacement with a straightforward definition syntax
+  gem "factory_bot_rails", "~> 6.2"
+  # Allow to generate fake data easily
+  gem "faker", "~> 3.2"
 end
 
 group :development do
