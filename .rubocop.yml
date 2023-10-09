@@ -1,7 +1,9 @@
 inherit_from:
   - https://relaxed.ruby.style/rubocop.yml
 
-require: rubocop-rails
+require:
+  - rubocop-rails
+  - rubocop-disable_syntax
 
 AllCops:
   DisplayStyleGuide: true
@@ -23,3 +25,17 @@ Metrics/BlockLength:
     - 'spec/**/*.rb'
     - 'Guardfile'
     - 'vendor/bundle'
+
+Style/DisableSyntax:
+  DisableSyntax:
+#    - unless
+#    - ternary
+#    - safe_navigation
+    - endless_methods
+    - arguments_forwarding
+    - numbered_parameters
+#    - pattern_matching
+#    - shorthand_hash_syntax
+    - and_or_not
+    - until
+#    - percent_literals

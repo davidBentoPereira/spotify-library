@@ -69,6 +69,8 @@ group :development do
   # gem "spring"
   # A ruby linter focused on enforcing Rails best practices and coding conventions.
   gem "rubocop-rails", "~> 2.21"
+  # A rubocop add-on allowing to disable some ruby syntaxe
+  gem "rubocop-disable_syntax", "~> 0.1.0"
 end
 
 group :test do
