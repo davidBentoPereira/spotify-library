@@ -67,6 +67,8 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+  # A ruby linter focused on enforcing Rails best practices and coding conventions.
+  gem "rubocop-rails", "~> 2.21"
 end
 
 group :test do
