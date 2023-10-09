@@ -83,3 +83,6 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+
+# A tool to manage and configure Git hooks.
+gem "overcommit", "~> 0.60.0"
