@@ -8,6 +8,7 @@ require:
 AllCops:
   DisplayStyleGuide: true
   DisplayCopNames: true
+  NewCops: enable
   Exclude:
     - 'db/schema.rb'
     - 'vendor/**/*'
