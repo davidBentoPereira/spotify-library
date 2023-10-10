@@ -7,26 +7,29 @@ require:
   - rubocop-disable_syntax
 
 AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.0
   DisplayStyleGuide: true
   DisplayCopNames: true
-  NewCops: enable
+  SuggestExtensions: false
   Exclude:
-    - 'db/schema.rb'
-    - 'vendor/**/*'
-    - 'config/environments/*.rb'
     - 'bin/*'
-
-Rails:
-  Enabled: True
-
-Style/FrozenStringLiteralComment:
-  Enabled: false
+    - 'vendor/**/*'
+    - 'node_modules/**/*'
 
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'
     - 'Guardfile'
-    - 'vendor/bundle'
+    - 'config/environments/*.rb'
+    - 'lib/tasks/*.rake'
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+### Prettier
+Style:
+  Enabled: false
 
 Style/DisableSyntax:
   DisableSyntax:

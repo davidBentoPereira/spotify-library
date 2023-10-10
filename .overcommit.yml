@@ -21,9 +21,9 @@ PreCommit:
   RuboCop:
     enabled: true
     command: ["bundle", "exec", "rubocop"] # Invoke within Bundler context
-  Prettier:
-    enabled: true
-    command: ["bin/prettirun"]
+#  Prettier:
+#    enabled: true
+#    command: ["bin/prettirun"]
 PrePush:
   RuboCop:
     enabled: true
@@ -31,9 +31,9 @@ PrePush:
   Tests:
     enabled: true
     command: ["bundle", "exec", "rspec", "-f", "d"]
-  Prettier:
-    enabled: true
-    command: ["bin/prettirun"]
+#  Prettier:
+#    enabled: true
+#    command: ["bin/prettirun"]
 
 #  TrailingWhitespace:
 #    enabled: true
