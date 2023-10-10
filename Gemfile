@@ -57,9 +57,11 @@ group :development, :test do
   # Unit test framework
   gem "rspec-rails", "~> 6.0"
   # factory_bot is a fixtures replacement with a straightforward definition syntax
-  gem "factory_bot_rails", "~> 6.2"
+  gem "factory_bot_rails"
   # Allow to generate fake data easily
-  gem "faker", "~> 3.2"
+  gem "faker"
+  # Shim to load environment variables from .env into ENV in development.
+  gem 'dotenv-rails'
 end
 
 group :development do
@@ -72,13 +74,13 @@ group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
   # A ruby linter focused on enforcing Rails best practices and coding conventions.
-  gem "rubocop-rails", "~> 2.21"
+  gem "rubocop-rails"
   # A rubocop add-on allowing to disable some ruby syntaxe
-  gem "rubocop-disable_syntax", "~> 0.1.0"
+  gem "rubocop-disable_syntax"
   # Performance optimization analysis for your projects, as an extension to RuboCop.
   gem "rubocop-performance", require: false
   # Add a comment summarizing the current schema to the top or bottom of each of your files
-  gem "annotate", "~> 3.2"
+  gem "annotate"
 end
 
 group :test do
