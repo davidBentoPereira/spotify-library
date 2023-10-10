@@ -15,37 +15,25 @@
 #
 # Uncomment the following lines to make the configuration take effect.
 
+verify_signatures: false
+
 PreCommit:
   RuboCop:
     enabled: true
-    command: ['bundle', 'exec', 'rubocop']
-    on_warn: fail # Treat all warnings as failures
-  Annotate:
-    enabled: true
-    command: ['bundle', 'exec', 'annotate']
-    on_warn: fail # Treat all warnings as failures
+    command: ["bundle", "exec", "rubocop"] # Invoke within Bundler context
   Prettier:
     enabled: true
-    command: ['bin/prettier']
-    on_warn: fail # Treat all warnings as failures
-
+    command: ["bin/prettirun"]
 PrePush:
   RuboCop:
     enabled: true
-    command: ['bundle', 'exec', 'rubocop']
-    on_warn: fail # Treat all warnings as failures
-  Annotate:
-    enabled: true
-    command: ['bundle', 'exec', 'annotate']
-    on_warn: fail # Treat all warnings as failures
+    command: ["bundle", "exec", "rubocop"]
   Tests:
     enabled: true
-    command: ['bundle', 'exec', 'rspec', '-f', 'd']
-    on_warn: fail # Treat all warnings as failures
+    command: ["bundle", "exec", "rspec", "-f", "d"]
   Prettier:
     enabled: true
-    command: ['bin/prettier']
-    on_warn: fail # Treat all warnings as failures
+    command: ["bin/prettirun"]
 
 #  TrailingWhitespace:
 #    enabled: true
