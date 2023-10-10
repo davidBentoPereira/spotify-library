@@ -33,4 +33,8 @@
 /app/assets/builds/*
 !/app/assets/builds/.keep
 
-.idea
+# Jetbrains config files
+.idea/
+
+# Node JS
+node_modules/
