@@ -5,6 +5,7 @@ inherit_from:
 require:
   - rubocop-rails
   - rubocop-disable_syntax
+  - rubocop-performance
 
 AllCops:
   NewCops: enable

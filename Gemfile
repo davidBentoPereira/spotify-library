@@ -75,7 +75,9 @@ group :development do
   gem "rubocop-rails", "~> 2.21"
   # A rubocop add-on allowing to disable some ruby syntaxe
   gem "rubocop-disable_syntax", "~> 0.1.0"
-  # Add a comment summarizing the current schema to the top or bottom of each of your
+  # Performance optimization analysis for your projects, as an extension to RuboCop.
+  gem "rubocop-performance", require: false
+  # Add a comment summarizing the current schema to the top or bottom of each of your files
   gem "annotate", "~> 3.2"
 end
 
@@ -91,4 +93,3 @@ gem "brakeman"
 
 # bundler-audit enables bundle audit which analyzes our dependencies for known vulnerabilities
 gem "bundler-audit"
-
