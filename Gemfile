@@ -97,3 +97,5 @@ gem "brakeman"
 gem "bundler-audit"
 # lograge changes Rails' logging to a more traditional one-line-per-event format
 gem "lograge"
+# Flexible authentication solution for Rails
+gem "devise", "~> 4.9"
