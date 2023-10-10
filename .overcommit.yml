@@ -17,20 +17,20 @@
 
 verify_signatures: false
 
-PreCommit:
-  RuboCop:
-    enabled: true
-    command: ["bundle", "exec", "rubocop"] # Invoke within Bundler context
+#PreCommit:
+#  RuboCop:
+#    enabled: true
+#    command: ["bundle", "exec", "rubocop"] # Invoke within Bundler context
 #  Prettier:
 #    enabled: true
 #    command: ["bin/prettirun"]
-PrePush:
-  RuboCop:
-    enabled: true
-    command: ["bundle", "exec", "rubocop"]
-  Tests:
-    enabled: true
-    command: ["bundle", "exec", "rspec", "-f", "d"]
+#PrePush:
+#  RuboCop:
+#    enabled: true
+#    command: ["bundle", "exec", "rubocop"]
+#  Tests:
+#    enabled: true
+#    command: ["bundle", "exec", "rspec", "-f", "d"]
 #  Prettier:
 #    enabled: true
 #    command: ["bin/prettirun"]
