@@ -85,3 +85,10 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+
+# Brakeman analyzes our code for security vulnerabilities
+gem "brakeman"
+
+# bundler-audit enables bundle audit which analyzes our dependencies for known vulnerabilities
+gem "bundler-audit"
+
