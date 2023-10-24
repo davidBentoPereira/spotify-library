@@ -20,8 +20,13 @@
 #
 FactoryBot.define do
   factory :user do
-    name { "MyString" }
-    email { "MyString" }
-    spotify_data { "" }
+    username { Faker::Internet.username.downcase }
+    email { Faker::Internet.email }
+    password { Faker::Internet.password(min_length: 10, max_length: 20) }
+
+    # TODO: To uncomment and fill in with a real example of spotify_data ?
+    # trait :with_spotify do
+    #   spotify_data { {} }
+    # end
   end
 end

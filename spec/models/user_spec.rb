@@ -21,5 +21,10 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let!(:user) { build(:user) }
+
+  # TODO: This test could be deleted in the futur. It exists as a proof that my user_factory is working
+  it "creates a user" do
+    expect { user.save! }.to change(User, :count)
+  end
 end
