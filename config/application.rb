@@ -20,6 +20,9 @@ module SpotifyLibrary
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.generators do |g|
+      g.assets false # create assets when generating a scaffold
+      g.helper false # generate helpers
+      g.stylesheets false # generate stylesheets
       g.orm :active_record, primary_key_type: :uuid
     end
   end
