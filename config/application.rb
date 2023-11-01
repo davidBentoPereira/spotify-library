@@ -25,5 +25,8 @@ module SpotifyLibrary
       g.stylesheets false # generate stylesheets
       g.orm :active_record, primary_key_type: :uuid
     end
+
+    # GZip all responses
+    config.middleware.use Rack::Deflater
   end
 end
