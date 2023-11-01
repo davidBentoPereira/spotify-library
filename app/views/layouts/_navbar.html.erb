@@ -1,0 +1,20 @@
+<nav class="bg-gray-900 px-2 h-16">
+  <div class='flex items-center'>
+    <!-- Logo -->
+<!--    <div>-->
+<!--      Spotify Library-->
+<!--    </div>-->
+
+    <!-- Navbar -->
+    <div class="flex space-x-4">
+      <%= link_to "Home", :root, class: "bg-gray-800 text-white rounded-md px-3 py-2 text-sm font-medium" %>
+      <% if user_signed_in? %>
+        <%= button_to "Log out", destroy_user_session_path, method: :delete, class: "text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+        <%= link_to current_user.email, edit_user_registration_path, class: "text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+      <% else %>
+        <%= link_to "Log in", new_user_session_path, class: "text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+        <%= link_to "Register", new_user_registration_path, class: "text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" %>
+      <% end %>
+    </div>
+  </div>
+</nav>

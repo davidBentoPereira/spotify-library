@@ -1,10 +1,13 @@
-<h1 class='text-orange-600'><%= @test %></h1>
+<section>
+  <div class='container mx-auto m-5 mt-10'>
+    <h1 class='text-4xl font-bold text-green-400 text-center'>Spotify Library</h1>
 
-<p>test</p>
+    <div class="mt-8">
+      <% if current_user %>
+        <p><span class='font-bold mr-8'>Username:</span> <%= current_user.username %></p>
+        <p><span class='font-bold mr-8'>Email:</span> <%= current_user.email %></p>
+      <% end %>
+    </div>
 
-<br />
-<br>
-
-<p class='text-red-600 bg'>Username: <%= current_user.username %></p>
-
-<div class="bg-black p-6 h-10 text-white" >Hello, World!</div>
+  </div>
+</section>
