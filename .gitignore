@@ -46,3 +46,6 @@ node_modules/
 # so we really don't want this in version control
 .env.*.local
 
+# Macos files
+.DS_STORE
+
