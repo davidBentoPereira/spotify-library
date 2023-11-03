@@ -8,12 +8,14 @@
 
         <%= link_to 'Sign in with Spotify', '/auth/spotify', method: :post, class: "rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
       <% else %>
-        <h3 class='text-xl text-white'>Followed Artists</h3>
+        <h3 class='text-xl text-white'>Followed Artists (<%= @followed_artists.size %>)</h3>
+
+        <%= link_to 'Sync followed artists', '/auth/spotify', method: :post, class: "rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
 
         <div class='mt-5'>
           <% @followed_artists.each do |artist| %>
-            <h4 class='text-lg text-white'><%= link_to(artist.name, "#{artist.external_urls["spotify"]}?si=QoKxSaCaRyCyG7-dRHDVEg", {target: "_blank"} ) %></h4>
-            <%= image_tag(artist.images.last["url"], height: artist.images.last["height"], width: artist.images.last["width"]) %>
+            <h4 class='text-lg text-white'><%= link_to(artist.name, artist.external_link, {target: "_blank"} ) %></h4>
+            <%= image_tag(artist.avatar, height: 160, width: 160) if artist.avatar.persisted? %>
             <hr>
           <% end %>
         </div>
