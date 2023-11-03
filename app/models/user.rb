@@ -29,5 +29,5 @@ class User < ApplicationRecord
   validates :username, length: { in: 4..30 }, format: { with: /\A[a-z0-9_]{4,30}\z/ }
   validates :email, format: { with: Devise::email_regexp }
 
-  # TODO: Add callback to auto format username
+  # TODO: Add callback to auto format username + unit tests
 end
