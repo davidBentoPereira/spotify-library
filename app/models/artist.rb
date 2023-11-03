@@ -11,5 +11,8 @@
 class Artist < ApplicationRecord
   has_one_attached :avatar
 
+  has_many :artists_collections, dependent: :nullify # TODO: not 100% sure about that
+  has_many :users, through: :artists_collections
+
   validates :name, :external_link, presence: true
 end

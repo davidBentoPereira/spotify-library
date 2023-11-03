@@ -23,6 +23,9 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
 
+  has_many :artists_collections, dependent: :destroy # TODO: not 100% sure about that
+  has_many :artists, through: :artists_collections
+
   validates :username, :email, presence: true
   # Username must be between 4 and 30 characters long has to contain
   # only lowercase alphabetical characters, numbers and underscores (_)
