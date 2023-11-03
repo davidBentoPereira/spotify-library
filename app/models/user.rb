@@ -23,12 +23,11 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
 
-  validates :username, :email, :password, presence: true
+  validates :username, :email, presence: true
   # Username must be between 4 and 30 characters long has to contain
   # only lowercase alphabetical characters, numbers and underscores (_)
   validates :username, length: { in: 4..30 }, format: { with: /\A[a-z0-9_]{4,30}\z/ }
   validates :email, format: { with: Devise::email_regexp }
 
   # TODO: Add callback to auto format username
-
 end

@@ -28,5 +28,8 @@ module SpotifyLibrary
 
     # GZip all responses
     config.middleware.use Rack::Deflater
+
+    # Connect to the spotify API
+    RSpotify.authenticate(ENV['SPOTIFY_CLIENT_ID'], ENV['SPOTIFY_CLIENT_SECRET'])
   end
 end

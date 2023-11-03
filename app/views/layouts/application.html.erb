@@ -11,10 +11,16 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class='bg-gray-800 text-white'>
+  <body class='bg-gray-800'>
     <main class="">
-      <p class="notice"><%= notice %></p>
-      <p class="alert"><%= alert %></p>
+      <aside>
+        <% if notice %>
+          <p class="p-5 text-white"><%= notice %></p>
+        <% end %>
+        <% if alert %>
+          <p class="p-5 bg-red-800 text-white"><%= alert %></p>
+        <% end %>
+      </aside>
 
       <%= render "layouts/navbar" %>
       <%= yield %>

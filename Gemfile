@@ -62,6 +62,8 @@ group :development, :test do
   gem "faker"
   # Shim to load environment variables from .env into ENV in development.
   gem 'dotenv-rails'
+  # Useful for debugging
+  gem "pry"
 end
 
 group :development do
@@ -98,4 +100,8 @@ gem "bundler-audit"
 # lograge changes Rails' logging to a more traditional one-line-per-event format
 gem "lograge"
 # Flexible authentication solution for Rails
-gem "devise", "~> 4.9"
+gem "devise"
+# A ruby wrapper for the Spotify Web API
+gem "rspotify"
+
+gem "omniauth-rails_csrf_protection"
