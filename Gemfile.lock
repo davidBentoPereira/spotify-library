@@ -206,6 +206,8 @@ GEM
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
+    pry-nav (1.0.0)
+      pry (>= 0.9.10, < 0.15)
     psych (5.1.0)
       stringio
     public_suffix (5.0.3)
@@ -381,6 +383,7 @@ DEPENDENCIES
   omniauth-rails_csrf_protection
   pg (~> 1.1)
   pry
+  pry-nav (~> 1.0)
   puma (~> 5.0)
   rails (~> 7.0.6)
   redis (~> 4.0)

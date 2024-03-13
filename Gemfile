@@ -105,3 +105,5 @@ gem "devise"
 gem "rspotify"
 
 gem "omniauth-rails_csrf_protection"
+
+gem "pry-nav", "~> 1.0"
