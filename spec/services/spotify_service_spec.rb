@@ -22,7 +22,7 @@ RSpec.describe SpotifyService do
       it "adds the artist to the user's collection of artists"
     end
 
-    context "when a spotify artisthas been unfollowed" do
+    context "when a spotify artist has been unfollowed" do
       it "removes the link from the user's collection of artists"
 
       it "keeps the artist into the database"

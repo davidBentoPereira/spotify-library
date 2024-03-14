@@ -10,49 +10,55 @@ class SpotifyService
     # @spotify_user = spotify_user || RSpotify::User.new(current_user.spotify_data)
   end
 
-  # TODO: [️️️⚡️Performance] I should make an insert_all rather than a find_or_create
   # TODO: [⚡️Performance] I should create a background job to process this work
-  # TODO: [✨DB Integrity] Rollback if ther's any problem during the process
   def load_artists
     # Starts Timer
     starting = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
-    previously_followed_artists_by_name = @current_user.artists.pluck(:name).to_set
-    all_followed_artists = []
-    last_artist_id = nil
-    number_of_artists_to_load = 50
+    ActiveRecord::Base.transaction do
+      previously_followed_artists_by_name = @current_user.artists.pluck(:name).to_set
+      all_followed_artists = []
+      last_artist_id = nil
+      number_of_artists_to_load = 50 # TODO: The 50 is a magical number. It should be a CONSTANT
 
-    while number_of_artists_to_load == 50 # Why 50 ? Because it's the maximum number of elements per page we can get
-      batch_of_followed_artists = fetch_followed_artists(last_artist_id)
-      all_followed_artists << batch_of_followed_artists
-      last_artist_id = batch_of_followed_artists.last&.id
-      number_of_artists_to_load = batch_of_followed_artists.size
+      while number_of_artists_to_load == 50 # Why 50 ? Because it's the maximum number of elements per page we can get
+        batch_of_followed_artists = fetch_followed_artists(last_artist_id)
+        all_followed_artists << batch_of_followed_artists
+        last_artist_id = batch_of_followed_artists.last&.id
+        number_of_artists_to_load = batch_of_followed_artists.size
 
-      # We make a find_or_create_by to avoid duplicates
-      # TODO: [⚡️Performance Tip] I should :
-      # - add an attribute spotify_id to Artist
-      # - create a table index on spotify_id
-      # - do the find_or_create_by on artist.spotify_id
-      # Peformance will be better by searching on an Integer than on a String
-      batch_of_followed_artists.each do |followed_artist|
-        # Try to find the artist by name
-        artist = Artist.find_or_initialize_by(name: followed_artist.name)
+        # We make a find_or_create_by to avoid duplicates
+        # TODO: [⚡️Performance Tip] I should :
+        # - add an attribute spotify_id to Artist
+        # - create a table index on spotify_id
+        # - do the find_or_create_by on artist.spotify_id
+        # Peformance will be better by searching on an Integer than on a String
 
-        # If the artist doesn't exist, create it with its external link and avatar
-        if artist.new_record?
-          artist.external_link = followed_artist.external_urls["spotify"]
-          attach_avatar(artist, followed_artist)
-          artist.save!
+        # Collect all new artists to be created in this batch
+        artists_to_create = []
+        batch_of_followed_artists.each do |followed_artist|
+          artists_to_create << {name: followed_artist.name, external_link: followed_artist.external_urls["spotify"]}
+
+          # Check if the user is already following the artist. If not, add it to the user's collection of artists
+          # @current_user.artists << artist unless @current_user.artists.exists?(artist.id)
         end
 
-        # Check if the user is already following the artist. If not, add it to the user's collection of artists
-        unless @current_user.artists.exists?(artist.id)
-          @current_user.artists << artist
+        # Insert all new artists in a single database query
+        Artist.insert_all(artists_to_create, unique_by: :name)
+
+        # Attach new artists to the current user
+        artist_ids = Artist.where(name: artists_to_create.pluck(:name)).pluck(:id)
+        @current_user.artists_collections.create(artist_ids.map { |artist_id| { artist_id: artist_id } })
+
+        # Attach avatars to newly created artists
+        artists_to_create.each do |artist_params|
+          artist = Artist.find_by(name: artist_params[:name])
+          attach_avatar(artist, batch_of_followed_artists.find { |artist| artist.name == artist_params[:name] })
         end
+
+        remove_unfollowed_artists(all_followed_artists, previously_followed_artists_by_name)
       end
     end
-
-    remove_unfollowed_artists(all_followed_artists, previously_followed_artists_by_name)
 
     # End Timer and print it in console
     ending = Process.clock_gettime(Process::CLOCK_MONOTONIC)
@@ -84,7 +90,7 @@ class SpotifyService
     avatar_url = spotify_artist.images.last&.dig("url")
     if avatar_url
       begin
-        artist.avatar.attach(io: open_avatar(avatar_url), filename: filename_avatar(artist.name))
+        artist.avatar.attach(io: URI.open(avatar_url), filename: filename_avatar(artist.name))
       rescue => e
         Rails.logger.info("Error attaching avatar for artist #{artist.name}: #{e.message}")
       end
@@ -96,10 +102,6 @@ class SpotifyService
   # Return a link opening the artist's page on Spotify's App
   def external_link(artist_url)
     "#{artist_url}?si=QoKxSaCaRyCyG7-dRHDVEg"
-  end
-
-  def open_avatar(url)
-    URI.parse(url).open
   end
 
   # Return a filename for the Spotify artists' avatars

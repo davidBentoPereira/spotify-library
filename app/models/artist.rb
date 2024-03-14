@@ -8,6 +8,10 @@
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #
+# Indexes
+#
+#  index_artists_on_name  (name) UNIQUE
+#
 class Artist < ApplicationRecord
   has_one_attached :avatar
 
