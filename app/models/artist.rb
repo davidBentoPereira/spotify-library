@@ -3,6 +3,7 @@
 # Table name: artists
 #
 #  id            :uuid             not null, primary key
+#  cover_url     :string
 #  external_link :string
 #  name          :string
 #  created_at    :datetime         not null
