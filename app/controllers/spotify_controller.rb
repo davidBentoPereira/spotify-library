@@ -3,7 +3,7 @@ class SpotifyController < ApplicationController
     # Get Spotify's user data
     spotify_user = RSpotify::User.new(request.env['omniauth.auth'])
 
-    # Save User's spotify data
+    # Save User's Spotify data
     current_user.update(spotify_data: spotify_user.as_json)
 
     # Save artists
