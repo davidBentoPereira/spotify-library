@@ -3,11 +3,11 @@ require 'open-uri'
 class SpotifyService
   MAX_ARTIST_PER_PAGE = 50
 
-  attr_reader :current_user, :spotify_user
+  attr_reader :current_user
 
-  def initialize(current_user, spotify_user)
+  def initialize(current_user)
     @current_user = current_user
-    @spotify_user = spotify_user
+    @spotify_user = current_user.spotify_user
   end
 
   # TODO: [⚡️Performance] I should create a background job to process this work
@@ -36,7 +36,7 @@ class SpotifyService
 
         # Insert new artists in a single database query
         unless spotify_artists_to_create.empty?
-          Artist.insert_all(spotify_artists_to_create.map { |artist| { name: artist.name, external_link: artist.external_urls["spotify"], cover_url: artist.images.last&.dig("url") }  }, unique_by: :name)
+          Artist.insert_all(spotify_artists_to_create.map { |artist| { name: artist.name, external_link: artist.uri, cover_url: artist.images.last&.dig("url") }  }, unique_by: :name)
         end
 
         # Fetch artist IDs for newly created and existing artists
@@ -54,7 +54,7 @@ class SpotifyService
 
   # Use Spotify's API to fetch the following artists
   def fetch_followed_artists(last_artist_id)
-    @spotify_user.following(type: 'artist', limit: 50, after: last_artist_id)
+    @current_user.spotify_user.following(type: 'artist', limit: 50, after: last_artist_id)
   end
 
   def remove_unfollowed_artists(all_followed_artists, previously_followed_artist_names)
@@ -68,7 +68,7 @@ class SpotifyService
   end
 
   # Return a link opening the artist's page on Spotify's App
-  def external_link(artist_url)
-    "#{artist_url}?si=QoKxSaCaRyCyG7-dRHDVEg"
+  def external_link(artist_uri)
+    "spotify:#{artist_uri}"
   end
 end

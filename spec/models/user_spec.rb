@@ -27,4 +27,24 @@ RSpec.describe User, type: :model do
   it "creates a user" do
     expect { user.save! }.to change(User, :count)
   end
+
+  describe "private methods" do
+    describe "#spotify_user" do
+      context "when user already has spotify_data" do
+        let(:user) { create(:user, :with_spotify_data) }
+
+        it "returns an object RSpotify::User" do
+          expect(user.spotify_user).to be_a(RSpotify::User)
+        end
+      end
+
+      context "when user has no spotify_data" do
+        let(:user) { create(:user) }
+
+        it "raises an error" do
+          expect { user.spotify_user }.to raise_error(StandardError, /User is missing spotify_data./)
+        end
+      end
+    end
+  end
 end

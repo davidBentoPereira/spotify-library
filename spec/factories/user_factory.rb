@@ -20,13 +20,49 @@
 #
 FactoryBot.define do
   factory :user do
-    username { Faker::Internet.username.downcase }
+    username { Faker::Internet.username(specifier: 4..30, separators: %w(_)) }
     email { Faker::Internet.email }
     password { Faker::Internet.password(min_length: 10, max_length: 20) }
 
-    # TODO: To uncomment and fill in with a real example of spotify_data ?
-    # trait :with_spotify do
-    #   spotify_data { {} }
-    # end
+    trait :with_spotify_data do
+      spotify_data do
+        {
+          birthdate: "1990-05-15",
+          country: "US",
+          display_name: "john_doe",
+          email: "john.doe@example.com",
+          followers: {
+            href: nil,
+            total: 1000
+          },
+          images: [
+            {
+              url: "https://example.com/image1.jpg",
+              height: 100,
+              width: 100
+            },
+            {
+              url: "https://example.com/image2.jpg",
+              height: 200,
+              width: 200
+            }
+          ],
+          product: "free",
+          external_urls: {
+            spotify: "https://open.spotify.com/user/john_doe"
+          },
+          href: "https://api.spotify.com/v1/users/john_doe",
+          id: "john_doe",
+          type: "user",
+          uri: "spotify:user:john_doe",
+          credentials: {
+            token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+            refresh_token: "m5VgoYCGNBr8SKys",
+            expires_at: 1910760210,
+            expires: false
+          }
+        }
+      end
+    end
   end
 end

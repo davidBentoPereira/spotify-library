@@ -15,7 +15,6 @@
         <div class='mt-5'>
           <% @followed_artists.each do |artist| %>
             <h4 class='text-lg text-white'><%= link_to(artist.name, artist.external_link, {target: "_blank"} ) %></h4>
-            <%#= image_tag(artist.cover_url, height: 160, width: 160) %>
             <%= image_tag(artist.cover_url, height: 160, width: 160) if artist.cover_url.present? %>
             <hr>
           <% end %>

@@ -32,5 +32,14 @@ class User < ApplicationRecord
   validates :username, length: { in: 4..30 }, format: { with: /\A[a-z0-9_]{4,30}\z/ }
   validates :email, format: { with: Devise::email_regexp }
 
-  # TODO: Add callback to auto format username + unit tests
+
+  # def auto_format_username
+    # TODO : Idea 💡 : Add a feature to auto_format the username when user chooses one.
+  # end
+
+  def spotify_user
+    raise MissingSpotifyDataError if spotify_data.blank?
+
+    RSpotify::User.new(spotify_data)
+  end
 end

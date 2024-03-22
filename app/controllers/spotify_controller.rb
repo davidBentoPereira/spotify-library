@@ -7,7 +7,7 @@ class SpotifyController < ApplicationController
     current_user.update(spotify_data: spotify_user.as_json)
 
     # Save artists
-    SpotifyService.new(current_user, spotify_user).load_artists
+    SpotifyService.new(current_user).load_artists
 
     if current_user.save
       # Redirect to homepage with a flash message
