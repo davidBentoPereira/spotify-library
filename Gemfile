@@ -109,3 +109,5 @@ gem "omniauth-rails_csrf_protection"
 
 # Pagination
 gem "kaminari", "~> 1.2"
+
+gem "sidekiq", "~> 7.2", ">= 7.2.2"
