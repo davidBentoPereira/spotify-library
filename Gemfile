@@ -107,3 +107,5 @@ gem "rspotify"
 gem "omniauth-rails_csrf_protection"
 
 gem "pry-nav", "~> 1.0"
+
+gem "sidekiq", "~> 7.2", ">= 7.2.2"
