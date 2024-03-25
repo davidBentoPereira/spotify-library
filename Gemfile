@@ -111,3 +111,5 @@ gem "omniauth-rails_csrf_protection"
 gem "kaminari", "~> 1.2"
 
 gem "sidekiq", "~> 7.2", ">= 7.2.2"
+
+gem "rspec-sidekiq", "~> 4.1"
