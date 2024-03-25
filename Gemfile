@@ -88,6 +88,7 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
+  gem "rspec-sidekiq", "~> 4.1"
   gem "selenium-webdriver"
   gem "webdrivers"
 end
@@ -109,5 +110,3 @@ gem "omniauth-rails_csrf_protection"
 gem "pry-nav", "~> 1.0"
 
 gem "sidekiq", "~> 7.2", ">= 7.2.2"
-
-gem "rspec-sidekiq", "~> 4.1"
