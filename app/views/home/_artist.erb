@@ -1,0 +1,10 @@
+<%= link_to(artist.external_link, {target: "_blank"} ) do %>
+  <div class='p-2 hover:bg-gray-700 hover:rounded-md mx-auto flex flex-col items-center'>
+    <!-- Artist cover -->
+    <div class="h-32 w-32 flex items-center justify-center rounded-full overflow-hidden">
+      <%= image_tag(artist.cover_url, class: "h-full w-full object-cover") if artist.cover_url.present? %>
+    </div>
+    <!-- Artist name -->
+    <h4 class='text-md text-white text-center mt-2'><%= artist.name %></h4>
+  </div>
+<% end %>

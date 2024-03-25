@@ -21,6 +21,9 @@ Rails.application.routes.draw do
   # * Add the new custom route below the existing ones
   # * Document why it's needed
   # * Explain anything else non-standard
+
+  post "sync_spotify_followed_artists", to:"home#sync_spotify_followed_artists"
+
   # #########################################
   #  #########################################
   #   #########################################

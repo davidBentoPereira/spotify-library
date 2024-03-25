@@ -1,4 +1,5 @@
 class SpotifyController < ApplicationController
+  # TODO: This should be a "create" action like in "create a spotify session", no ?
   def show
     # Get Spotify's user data
     spotify_user = RSpotify::User.new(request.env['omniauth.auth'])

@@ -8,20 +8,22 @@
 
         <%= link_to 'Sign in with Spotify', '/auth/spotify', method: :post, class: "rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
       <% else %>
-        <h3 class='text-xl text-white'>Followed Artists (<%= @followed_artists.size %>)</h3>
+        <h3 class='text-xl text-white'>Followed Artists (<%= @followed_artists_count %>)</h3>
 
-        <%= link_to 'Sync followed artists', '/auth/spotify', method: :post, class: "rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
+        <%= button_to 'Sync followed artists', sync_spotify_followed_artists_path, method: :post, class: "rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 rounded-full" %>
 
-        <div class='mt-5'>
+        <div class='grid xl:grid-cols-8 lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-4 mt-5'>
+          <!-- Artist list -->
           <% @followed_artists.each do |artist| %>
-            <h4 class='text-lg text-white'><%= link_to(artist.name, artist.external_link, {target: "_blank"} ) %></h4>
-            <%= image_tag(artist.cover_url, height: 160, width: 160) if artist.cover_url.present? %>
-            <hr>
+            <%= render "artist", artist: artist %>
           <% end %>
+        </div>
+
+        <div class='container text-white text-md'>
+          <%= paginate @followed_artists, remote: true, class: "mx-auto" %>
         </div>
       <% end %>
     </div>
-
   </div>
 </section>
 
