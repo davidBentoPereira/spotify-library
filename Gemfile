@@ -64,6 +64,7 @@ group :development, :test do
   gem 'dotenv-rails'
   # Useful for debugging
   gem "pry"
+  gem "pry-nav", "~> 1.0"
 end
 
 group :development do
