@@ -16,6 +16,7 @@ class SpotifyService
   #         # - create a table index on spotify_id
   #         # - do the find_or_create_by on artist.spotify_id
   #         # Peformance will be better by searching on an Integer than on a String
+  # TODO: [ 🤓Readability] Rename this method as "sync_followed_artists" ?
   def load_artists
     ActiveRecord::Base.transaction do
       # Fetch all artist names already followed by the user
