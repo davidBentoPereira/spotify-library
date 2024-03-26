@@ -64,6 +64,7 @@ group :development, :test do
   gem 'dotenv-rails'
   # Useful for debugging
   gem "pry"
+  gem "pry-nav", "~> 1.0"
 end
 
 group :development do
@@ -107,6 +108,7 @@ gem "rspotify"
 
 gem "omniauth-rails_csrf_protection"
 
-gem "pry-nav", "~> 1.0"
+# Pagination
+gem "kaminari", "~> 1.2"
 
 gem "sidekiq", "~> 7.2", ">= 7.2.2"
