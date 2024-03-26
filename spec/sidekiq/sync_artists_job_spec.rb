@@ -7,7 +7,7 @@ RSpec.describe SyncArtistsJob, type: :job do
     it "calls SpotifyService to sync the followed artists of the current user" do
       spotify_service_double = instance_double(SpotifyService)
       allow(SpotifyService).to receive(:new).with(user).and_return(spotify_service_double)
-      expect(spotify_service_double).to receive(:fetch_and_load_followed_artists)
+      expect(spotify_service_double).to receive(:fetch_and_load_artists)
 
       SyncArtistsJob.new.perform(user.id)
     end

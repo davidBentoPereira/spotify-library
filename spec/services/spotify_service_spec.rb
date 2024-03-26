@@ -54,7 +54,7 @@ RSpec.describe SpotifyService do
   end
 
   context "#load_artists" do
-    subject(:fetch_and_load_followed_artists) { spotify_service.fetch_and_load_followed_artists }
+    subject(:fetch_and_load_artists) { spotify_service.fetch_and_load_artists }
 
     context "when there is a new followed artist" do
       before do

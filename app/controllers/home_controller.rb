@@ -10,7 +10,7 @@ class HomeController < ApplicationController
 
   # TODO: Move this method to SpotifyController ?
   def sync_spotify_followed_artists
-    SpotifyService.new(current_user).fetch_and_load_followed_artists
+    SpotifyService.new(current_user).fetch_and_load_artists
 
     head :ok
   end
