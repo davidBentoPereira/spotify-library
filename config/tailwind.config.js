@@ -14,6 +14,9 @@ module.exports = {
       },
       container: {
         center: true
+      },
+      colors: {
+        "green-spotify": "#1DB954"
       }
     },
   },
