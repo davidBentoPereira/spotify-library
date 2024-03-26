@@ -11,5 +11,15 @@ RSpec.describe SyncFollowedArtistsJob, type: :job do
 
       SyncFollowedArtistsJob.new.perform(user.id)
     end
+
+    context "when an exception is raised" do
+      before { allow(User).to receive(:find).and_raise(StandardError.new("User not found")) }
+
+      it "logs an error" do
+        expect(Rails.logger).to receive(:error).with("Error syncing followed artists for user #{user.id}: User not found")
+
+        SyncFollowedArtistsJob.new.perform(user.id)
+      end
+    end
   end
 end
