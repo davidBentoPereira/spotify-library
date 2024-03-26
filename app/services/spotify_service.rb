@@ -16,7 +16,8 @@ class SpotifyService
   #         # - create a table index on spotify_id
   #         # - do the find_or_create_by on artist.spotify_id
   #         # Peformance will be better by searching on an Integer than on a String
-  def load_artists
+  # TODO: [ 🤓Readability] Rename this method as "sync_followed_artists" ?
+  def fetch_and_load_followed_artists
     ActiveRecord::Base.transaction do
       # Fetch all artist names already followed by the user
       followed_artist_names = @current_user.artists.pluck(:name)
@@ -43,7 +44,7 @@ class SpotifyService
         artist_ids = Artist.where(name: spotify_artists_to_create.map(&:name)).pluck(:id)
 
         # Attach new artists to the current user
-        @current_user.artists_collections.create(artist_ids.map { |artist_id| { artist_id: artist_id } })
+        @current_user.artists_collections.create!(artist_ids.map { |artist_id| { artist_id: artist_id } })
       end
 
       remove_unfollowed_artists(all_followed_artists, followed_artist_names)

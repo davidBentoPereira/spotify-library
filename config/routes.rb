@@ -22,7 +22,7 @@ Rails.application.routes.draw do
   # * Document why it's needed
   # * Explain anything else non-standard
 
-  post "sync_spotify_followed_artists", to:"home#sync_spotify_followed_artists"
+  post 'sync_spotify_followed_artists', to: 'home#sync_spotify_followed_artists', as: :sync_spotify_followed_artists
 
   # #########################################
   #  #########################################
