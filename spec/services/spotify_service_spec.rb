@@ -65,11 +65,11 @@ RSpec.describe SpotifyService do
         expect(load_artists).to change(Artist, :count).by(1)
       end
 
-      # it "adds the artist to the user's collection of artists"
+      # it "adds the artist to the user's followed artists"
     end
 
     context "when a spotify artist has been unfollowed" do
-      it "removes the link from the user's collection of artists"
+      it "removes the link from the user's followed artists"
       it "keeps the artist into the database"
     end
   end

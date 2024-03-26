@@ -44,7 +44,7 @@ class SpotifyService
         artist_ids = Artist.where(name: spotify_artists_to_create.map(&:name)).pluck(:id)
 
         # Attach new artists to the current user
-        @current_user.artists_collections.create!(artist_ids.map { |artist_id| { artist_id: artist_id } })
+        @current_user.followed_artists.create!(artist_ids.map { |artist_id| { artist_id: artist_id } })
       end
 
       remove_unfollowed_artists(all_followed_artists, followed_artist_names)
@@ -65,7 +65,7 @@ class SpotifyService
     return if unfollowed_artists_names.empty?
 
     artists_ids_to_delete = @current_user.artists.where(name: unfollowed_artists_names).pluck(:id)
-    @current_user.artists_collections.where(artist_id: artists_ids_to_delete).destroy_all
+    @current_user.followed_artists.where(artist_id: artists_ids_to_delete).destroy_all
   end
 
   # Return a link opening the artist's page on Spotify's App
