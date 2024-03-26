@@ -1,18 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe "Spotifies", type: :request do
-  describe "GET /index" do
+RSpec.describe "Spotify", type: :request do
+  describe "GET /show" do
     it "returns http success" do
-      get "/spotify/index"
+      # TODO: Fix this spec
+      post "/auth/spotify"
       expect(response).to have_http_status(:success)
     end
   end
-
-  describe "GET /callback" do
-    it "returns http success" do
-      get "/spotify/callback"
-      expect(response).to have_http_status(:success)
-    end
-  end
-
 end

@@ -1,4 +1,4 @@
-class SyncFollowedArtistsJob
+class SyncArtistsJob
   include Sidekiq::Worker
 
   def perform(user_id)

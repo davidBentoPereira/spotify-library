@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SyncFollowedArtistsJob, type: :job do
+RSpec.describe SyncArtistsJob, type: :job do
   describe "#perform" do
     let(:user) { create(:user) }
 
@@ -9,7 +9,7 @@ RSpec.describe SyncFollowedArtistsJob, type: :job do
       allow(SpotifyService).to receive(:new).with(user).and_return(spotify_service_double)
       expect(spotify_service_double).to receive(:fetch_and_load_followed_artists)
 
-      SyncFollowedArtistsJob.new.perform(user.id)
+      SyncArtistsJob.new.perform(user.id)
     end
 
     context "when an exception is raised" do
@@ -18,7 +18,7 @@ RSpec.describe SyncFollowedArtistsJob, type: :job do
       it "logs an error" do
         expect(Rails.logger).to receive(:error).with("Error syncing followed artists for user #{user.id}: User not found")
 
-        SyncFollowedArtistsJob.new.perform(user.id)
+        SyncArtistsJob.new.perform(user.id)
       end
     end
   end
