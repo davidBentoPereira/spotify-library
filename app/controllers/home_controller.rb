@@ -8,9 +8,10 @@ class HomeController < ApplicationController
     end
   end
 
+  # TODO: Move this method to SpotifyController ?
   def sync_spotify_followed_artists
     SpotifyService.new(current_user).load_artists
 
-    redirect_to(root_path)
+    head :ok
   end
 end
