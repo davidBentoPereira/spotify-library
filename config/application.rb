@@ -29,6 +29,8 @@ module SpotifyLibrary
     # GZip all responses
     config.middleware.use Rack::Deflater
 
+    config.active_job.queue_adapter = :sidekiq
+
     # Connect to the spotify API
     RSpotify.authenticate(ENV['SPOTIFY_CLIENT_ID'], ENV['SPOTIFY_CLIENT_SECRET'])
   end

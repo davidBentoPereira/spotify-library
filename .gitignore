@@ -49,3 +49,5 @@ node_modules/
 # Macos files
 .DS_STORE
 
+# Redis
+dump.rdb
