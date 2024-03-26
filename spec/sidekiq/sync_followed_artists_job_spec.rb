@@ -13,7 +13,7 @@ RSpec.describe SyncFollowedArtistsJob, type: :job do
     end
 
     context "when an exception is raised" do
-      before { allow(User).to receive(:find).and_raise(StandardError.new("User not found")) }
+      before { allow(User).to receive(:find).and_raise(ActiveRecord::RecordNotFound.new("User not found")) }
 
       it "logs an error" do
         expect(Rails.logger).to receive(:error).with("Error syncing followed artists for user #{user.id}: User not found")
