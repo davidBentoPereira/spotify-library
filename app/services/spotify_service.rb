@@ -44,7 +44,7 @@ class SpotifyService
         artist_ids = Artist.where(name: spotify_artists_to_create.map(&:name)).pluck(:id)
 
         # Attach new artists to the current user
-        @current_user.artists_collections.create(artist_ids.map { |artist_id| { artist_id: artist_id } })
+        @current_user.artists_collections.create!(artist_ids.map { |artist_id| { artist_id: artist_id } })
       end
 
       remove_unfollowed_artists(all_followed_artists, followed_artist_names)
