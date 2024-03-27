@@ -7,11 +7,4 @@ class HomeController < ApplicationController
       @followed_artists = current_user.artists.with_attached_avatar.order(name: :asc).page(params[:page])
     end
   end
-
-  # TODO: Move this method to SpotifyController ?
-  def sync_spotify_followed_artists
-    SpotifyService.new(current_user).fetch_and_load_artists
-
-    head :ok
-  end
 end

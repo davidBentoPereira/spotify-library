@@ -7,6 +7,7 @@ export default class extends Controller {
   syncArtists() {
     const button = this.element;
     const spinner = this.spinnerTarget;
+    const url = button.dataset.url
 
     // Show the spinner
     spinner.classList.remove('hidden');
@@ -16,7 +17,7 @@ export default class extends Controller {
 
     const csrfToken = document.querySelector("meta[name=csrf-token]").getAttribute("content");
 
-    fetch('/sync_spotify_followed_artists', {
+    fetch(url, {
       method: 'POST',
       headers: {
         'X-CSRF-Token': csrfToken,
