@@ -1,4 +1,4 @@
-class SyncArtistsJob
+class FetchArtistsJob
   include Sidekiq::Worker
 
   def perform(user_id)
@@ -6,6 +6,6 @@ class SyncArtistsJob
 
     SpotifyService.new(user).fetch_and_load_artists
   rescue StandardError => e
-    Rails.logger.error "Error syncing followed artists for user #{user_id}: #{e.message}"
+    Rails.logger.error "Error fetching followed artists for user #{user_id}: #{e.message}"
   end
 end

@@ -4,7 +4,7 @@ import { Turbo } from "@hotwired/turbo-rails";
 export default class extends Controller {
   static targets = ['spinner'];
 
-  syncArtists() {
+  fetchArtists() {
     const button = this.element;
     const spinner = this.spinnerTarget;
     const url = button.dataset.url

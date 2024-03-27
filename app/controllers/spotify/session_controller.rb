@@ -7,8 +7,8 @@ module Spotify
       # Save User's Spotify data
       current_user.update(spotify_data: spotify_user.as_json)
 
-      # Sync artists
-      SyncArtistsJob.perform_async(current_user.id)
+      # Fetch artists
+      FetchArtistsJob.perform_async(current_user.id)
 
       if current_user.save
         redirect_to(root_path, notice: I18n.t("login.spotify.success"))
