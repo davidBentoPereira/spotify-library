@@ -26,12 +26,10 @@ Rails.application.routes.draw do
   # * Document why it's needed
   # * Explain anything else non-standard
 
+  # Used by Spotify to redirect after Sign In
+  get "/auth/spotify/callback", to: "spotify/session#create"
 
   # #########################################
   #  #########################################
   #   #########################################
-
-  # Used by Spotify to redirect after Sign In
-  # TODO: We could redirect directly to HomeController#index ?
-  get "/auth/spotify/callback", to: "spotify/session#create"
 end
