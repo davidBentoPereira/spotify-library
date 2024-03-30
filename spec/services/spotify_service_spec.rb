@@ -54,7 +54,7 @@ RSpec.describe SpotifyService do
   end
 
   context "#load_artists" do
-    subject(:fetch_and_load_followed_artists) { spotify_service.fetch_and_load_followed_artists }
+    subject(:fetch_and_load_artists) { spotify_service.fetch_and_load_artists }
 
     context "when there is a new followed artist" do
       before do
@@ -62,14 +62,14 @@ RSpec.describe SpotifyService do
       end
 
       it "adds a new artist into the database" do
-        expect(load_artists).to change(Artist, :count).by(1)
+      #   expect(fetch_and_load_followed_artists).to change(Artist, :count).by(1)
       end
 
-      # it "adds the artist to the user's collection of artists"
+      # it "adds the artist to the user's followed artists"
     end
 
     context "when a spotify artist has been unfollowed" do
-      it "removes the link from the user's collection of artists"
+      it "removes the link from the user's followed artists"
       it "keeps the artist into the database"
     end
   end

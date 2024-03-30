@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: artists_collections
+# Table name: followed_artists
 #
 #  id         :uuid             not null, primary key
 #  created_at :datetime         not null
@@ -10,17 +10,15 @@
 #
 # Indexes
 #
-#  index_artists_collections_on_artist_id  (artist_id)
-#  index_artists_collections_on_user_id    (user_id)
+#  index_followed_artists_on_artist_id  (artist_id)
+#  index_followed_artists_on_user_id    (user_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (artist_id => artists.id)
 #  fk_rails_...  (user_id => users.id)
 #
-FactoryBot.define do
-  factory :artists_collection do
-    user { nil }
-    artist { nil }
-  end
+class FollowedArtist < ApplicationRecord
+  belongs_to :user
+  belongs_to :artist
 end

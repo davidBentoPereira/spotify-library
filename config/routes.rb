@@ -10,7 +10,11 @@ Rails.application.routes.draw do
   #  ############### Canonical Routes ############
   # #############################################
   resources :home, only: [:index]
-  resources :spotify, only: [:show]
+  namespace :spotify do
+    resources :session, only: [:create]
+    resources :artist, only: [:create]
+  end
+
 
   #   ###########################################
   #  ############### Custom Routes #############
@@ -22,13 +26,10 @@ Rails.application.routes.draw do
   # * Document why it's needed
   # * Explain anything else non-standard
 
-  post 'sync_spotify_followed_artists', to: 'home#sync_spotify_followed_artists', as: :sync_spotify_followed_artists
+  # Used by Spotify to redirect after Sign In
+  get "/auth/spotify/callback", to: "spotify/session#create"
 
   # #########################################
   #  #########################################
   #   #########################################
-
-  # Used by Spotify to redirect after Sign In
-  # TODO: We could redirect directly to HomeController#index ?
-  get "/auth/spotify/callback", to: "spotify#show"
 end

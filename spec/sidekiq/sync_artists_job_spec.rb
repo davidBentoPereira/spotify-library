@@ -1,24 +1,24 @@
 require 'rails_helper'
 
-RSpec.describe SyncFollowedArtistsJob, type: :job do
+RSpec.describe FetchArtistsJob, type: :job do
   describe "#perform" do
     let(:user) { create(:user) }
 
-    it "calls SpotifyService to sync the followed artists of the current user" do
+    it "calls SpotifyService to fetch the followed artists of the current user" do
       spotify_service_double = instance_double(SpotifyService)
       allow(SpotifyService).to receive(:new).with(user).and_return(spotify_service_double)
-      expect(spotify_service_double).to receive(:fetch_and_load_followed_artists)
+      expect(spotify_service_double).to receive(:fetch_and_load_artists)
 
-      SyncFollowedArtistsJob.new.perform(user.id)
+      FetchArtistsJob.new.perform(user.id)
     end
 
     context "when an exception is raised" do
       before { allow(User).to receive(:find).and_raise(ActiveRecord::RecordNotFound.new("User not found")) }
 
       it "logs an error" do
-        expect(Rails.logger).to receive(:error).with("Error syncing followed artists for user #{user.id}: User not found")
+        expect(Rails.logger).to receive(:error).with("Error fetching followed artists for user #{user.id}: User not found")
 
-        SyncFollowedArtistsJob.new.perform(user.id)
+        FetchArtistsJob.new.perform(user.id)
       end
     end
   end
