@@ -1,4 +1,21 @@
-<div class='container mx-auto w-6/12 py-12'>
+<style>
+    .slim-select-style .ss-content {
+        background-color: transparent !important;
+        border: none;
+        color: white;
+        /* Ajoutez d'autres styles personnalisés ici */
+    }
+
+    .ss-main .ss-values .ss-value {
+        background-color: #1DB954
+    }
+
+    .ss-content:hover .ss-list:hover .ss-option:hover {
+        background-color: #1DB954
+    }
+</style>
+
+<div class='container mx-auto w-3/12 py-12'>
   <%= form_with model: @followed_artist, url: spotify_followed_artist_path(@followed_artist), method: :put do |form| %>
     <div class="space-y-12">
       <div class="border-b border-gray-900/10 pb-12">
@@ -11,10 +28,9 @@
             <div class="mt-2">
               <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-white-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-green-spotify sm:max-w-md">
                 <%#= form.text_field :tag_list, placeholder: "pop, rock", class: "block flex-1 border-0 bg-transparent py-1.5 pl-1 text-white placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" %>
-                <%= form.select :tag_list,
-                                options_for_select(["rock", "pop", "grunge", "rap US", "rap FR"], @selected_tags),
-                                           { prompt: "Please select one or several values"},
-                                           { multiple: true,  class: "block flex-1 border-0 bg-transparent py-1.5 pl-1 text-white placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" }
+                <%= form.select :tag_list, options_for_select(["rock", "pop", "grunge", "rap US", "rap FR"], @selected_tags),
+                                           { },
+                                           { multiple: true, data: { controller: "slim" }, class: "" }
                 %>
 
               </div>
@@ -26,7 +42,7 @@
 
     <div class="mt-6 flex items-center justify-end gap-x-6">
       <%= link_to "Cancel", spotify_followed_artists_path, class: "text-sm font-semibold leading-6 text-gray-100" %>
-      <%= form.submit "Submit", class: "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
+      <%= form.submit "Submit", class: "rounded-md bg-green-spotify px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
     </div>
   <% end %>
 </div>
