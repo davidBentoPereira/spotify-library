@@ -21,4 +21,5 @@
 class FollowedArtist < ApplicationRecord
   belongs_to :user
   belongs_to :artist
+  acts_as_taggable_on :tags
 end
