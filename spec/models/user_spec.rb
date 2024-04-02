@@ -48,8 +48,18 @@ RSpec.describe User, type: :model do
     end
 
     describe "#tags" do
-      it "lists all the tags created by the user" do
+      let(:user) { create(:user) } # TODO: Create a trait :with_followed_artists that adds 3 followed_artists for example
+      let(:artist1) { create(:artist) }
+      let(:artist2) { create(:artist) }
 
+      before do
+        user.artists << [artist1, artist2]
+        artist1.tag_list.add("rock")
+        artist1.tag_list.add("pop", "rap")
+      end
+
+      it "lists all the tags created by the user" do
+        expects(user.tags).to eq(%w[rock pop rap])
       end
     end
   end

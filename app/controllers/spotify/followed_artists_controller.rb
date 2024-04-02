@@ -4,15 +4,8 @@ module Spotify
       if current_user&.spotify_data?
         @followed_artists_count = current_user.artists.count
         @page = params[:page] || 1
+        @tags = current_user.tags
         @followed_artists = current_user.artists.joins(:followed_artists).order(name: :asc).page(params[:page])
-
-        FollowedArtist
-        # artist_id = current_user.artists.where(name: "2TH").first.id
-        # @followed_artist = FollowedArtist.find_by(artist_id: artist_id)
-        # @followed_artist.tag_list
-        # @followed_artist.tag_list.add("rock")
-        # @followed_artist.save
-        # @followed_artist.tag_list
       end
     end
 

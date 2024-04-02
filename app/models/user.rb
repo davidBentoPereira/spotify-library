@@ -34,7 +34,7 @@ class User < ApplicationRecord
 
 
   # def auto_format_username
-    # TODO : Idea 💡 : Add a feature to auto_format the username when user chooses one.
+  # TODO : Idea 💡 : Add a feature to auto_format the username when user chooses one.
   # end
 
   def spotify_user
@@ -43,7 +43,8 @@ class User < ApplicationRecord
     RSpotify::User.new(spotify_data)
   end
 
+  # TODO: Needs to be optimized, it does 1 query for each followed_artist !!!
   def tags
-    current_user
+    self.followed_artists.map { |fa| fa.tag_list }.flatten.uniq
   end
 end

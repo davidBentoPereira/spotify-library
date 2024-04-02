@@ -1,6 +1,7 @@
 <section>
   <div class='container mx-auto m-5 mt-10'>
     <h1 class='text-4xl font-bold text-green-spotify text-center'>Spotify Library</h1>
+    <button type="button" data-action="dialog#open">Open modal</button>
 
     <div class='container mx-auto m-5 mt-10'>
       <% if !current_user %>
@@ -20,9 +21,9 @@
 
           <h3 class='text-xl text-white'>Ajouter un tag</h3>
 
-          <%# @tags.each do |tag| %>
-<!--            <span class="inline-flex items-center rounded-full bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"><%#= tag.name %></span>-->
-          <%# end %>
+          <% @tags.each do |tag| %>
+            <span class="inline-flex items-center rounded-full bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"><%= tag %></span>
+          <% end %>
         </div>
 
 
@@ -41,7 +42,7 @@
           Refresh my artists
         </button>
 
-        <div class='grid xl:grid-cols-8 lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-4 mt-5'>
+        <div class='grid xl:grid-cols-6 lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-4 mt-5'>
           <!-- Artist list -->
           <% @followed_artists.each do |artist| %>
             <%= render "artist", artist: artist %>
@@ -56,5 +57,11 @@
   </div>
 </section>
 
+<!-- Modal -->
+<div data-controller="dialog" data-action="click->dialog#backdropClose">
+  <dialog data-dialog-target="dialog">
+    <p>The modal's content here</p>
 
-
+    <button type="button" data-action="dialog#close" autofocus>Cancel</button>
+  </dialog>
+</div>
