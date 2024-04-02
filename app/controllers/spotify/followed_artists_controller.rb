@@ -22,6 +22,7 @@ module Spotify
 
     def edit
       @followed_artist = FollowedArtist.find_by(artist_id: params[:id])
+      @selected_tags = @followed_artist.tag_list
     end
 
     def create
@@ -36,8 +37,8 @@ module Spotify
     def update
       @followed_artist = FollowedArtist.find(params[:id])
 
-      if @followed_artist.update(followed_artist_params)
-        redirect_to :index
+      if @followed_artist.update!(tag_list: params[:followed_artist][:tag_list].join(", ").strip)
+        redirect_to spotify_followed_artists_path
       else
         render :edit, status: :unprocessable_entity
       end
