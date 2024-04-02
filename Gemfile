@@ -115,3 +115,5 @@ gem "kaminari", "~> 1.2"
 gem "sidekiq", "~> 7.2", ">= 7.2.2"
 # Tags
 gem "acts-as-taggable-on", "~> 10.0"
+# Icons
+gem "heroicon", "~> 1.0"

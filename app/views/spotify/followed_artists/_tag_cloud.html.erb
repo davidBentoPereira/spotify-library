@@ -1,0 +1,12 @@
+<div class='flex mt-5 mb-3 space-x-2'>
+  <!-- Badge "All" -->
+  <%= link_to spotify_followed_artists_path do %>
+    <span class="<%= badge_css_classes.first %>">Tous</span>
+  <% end %>
+  <!-- Badge "Filter by Tag" -->
+  <% tag_cloud(tags, badge_css_classes) do |tag, css_class| %>
+    <%= link_to spotify_followed_artists_path(filter: tag.name) do %>
+      <span class="<%= css_class %>"><%= "#{tag.name} (#{tag.taggings_count})" %></span>
+    <% end %>
+  <% end %>
+</div>

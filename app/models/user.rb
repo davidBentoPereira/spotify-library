@@ -26,6 +26,8 @@ class User < ApplicationRecord
   has_many :followed_artists, dependent: :destroy # TODO: not 100% sure about that
   has_many :artists, through: :followed_artists
 
+  acts_as_tagger
+
   validates :username, :email, presence: true
   # Username must be between 4 and 30 characters long has to contain
   # only lowercase alphabetical characters, numbers and underscores (_)
@@ -45,6 +47,6 @@ class User < ApplicationRecord
 
   # TODO: Needs to be optimized, it does 1 query for each followed_artist !!!
   def tags
-    self.followed_artists.map { |fa| fa.tag_list }.flatten.uniq
+    self.owned_tags
   end
 end

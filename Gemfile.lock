@@ -130,6 +130,8 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashie (5.0.0)
+    heroicon (1.0.0)
+      rails (>= 5.2)
     http-cookie (1.0.5)
       domain_name (~> 0.5)
     i18n (1.14.1)
@@ -410,6 +412,7 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faker
+  heroicon (~> 1.0)
   importmap-rails
   jbuilder
   kaminari (~> 1.2)

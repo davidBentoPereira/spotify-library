@@ -13,6 +13,3 @@
  *= require_tree .
  *= require_self
  */
-
-/* Slim Select */
-@import url("https://unpkg.com/slim-select@latest/dist/slimselect.css");

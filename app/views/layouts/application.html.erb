@@ -6,13 +6,13 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
-
+    <link href="https://unpkg.com/slim-select@latest/dist/slimselect.css" rel="stylesheet" />
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class='bg-gray-800'>
-    <main class="">
+  <body class='bg-dark-spotify'>
+    <main class="p-8">
       <aside>
         <% if notice %>
           <p class="p-5 text-white"><%= notice %></p>
