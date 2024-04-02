@@ -1,0 +1,19 @@
+<div class='p-2 hover:bg-gray-700 hover:rounded-md mx-auto flex flex-col items-center'>
+  <!-- Artist cover -->
+  <%= link_to(artist.external_link, {target: "_blank"} ) do %>
+    <div class="h-32 w-32 flex items-center justify-center rounded-full overflow-hidden">
+      <%= image_tag(artist.cover_url, class: "h-full w-full object-cover") if artist.cover_url.present? %>
+    </div>
+  <% end %>
+
+  <!-- Artist name -->
+  <h4 class='text-md text-white text-center mt-2'><%= artist.name %></h4>
+
+  <!-- Artist tags -->
+  <%= link_to "Tags", edit_spotify_followed_artist_path(artist), class: 'text-sm text-white text-center mt-2' %>
+  <div class='flex'>
+    <% artist.tag_list.each do |tag| %>
+      <span class="mx-1 inline-flex items-center rounded-full bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"><%= tag %></span>
+    <% end %>
+  </div>
+</div>

@@ -46,5 +46,11 @@ RSpec.describe User, type: :model do
         end
       end
     end
+
+    describe "#tags" do
+      it "lists all the tags created by the user" do
+
+      end
+    end
   end
 end

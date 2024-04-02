@@ -42,4 +42,8 @@ class User < ApplicationRecord
 
     RSpotify::User.new(spotify_data)
   end
+
+  def tags
+    current_user
+  end
 end

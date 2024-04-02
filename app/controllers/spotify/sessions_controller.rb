@@ -1,5 +1,5 @@
 module Spotify
-  class SessionController < ApplicationController
+  class SessionsController < ApplicationController
     def create
       # Get Spotify's user data
       spotify_user = RSpotify::User.new(request.env['omniauth.auth'])

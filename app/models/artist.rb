@@ -20,4 +20,8 @@ class Artist < ApplicationRecord
   has_many :users, through: :followed_artists
 
   validates :name, :external_link, presence: true
+
+  def tag_list
+    FollowedArtist.find_by(artist_id: self.id).tag_list
+  end
 end
