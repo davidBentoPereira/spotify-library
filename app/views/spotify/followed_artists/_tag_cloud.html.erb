@@ -1,7 +1,7 @@
-<div class='flex mt-5 mb-3 space-x-2'>
+<div class='flex flex-wrap mt-5 mb-3 space-x-2 space-y-2'>
   <!-- Badge "All" -->
   <%= link_to spotify_followed_artists_path do %>
-    <span class="<%= badge_css_classes.first %>">Tous</span>
+    <span class="<%= badge_css_classes.first %>">All (<%= @followed_artists_count %>)</span>
   <% end %>
   <!-- Badge "Filter by Tag" -->
   <% tag_cloud(tags, badge_css_classes) do |tag, css_class| %>
