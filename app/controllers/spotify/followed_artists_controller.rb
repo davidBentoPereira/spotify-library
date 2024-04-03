@@ -8,10 +8,9 @@ module Spotify
 
         if params[:filter].present?
           # TODO: Safety check on param :filter before using it
-
-          @followed_artists = current_user.followed_artists.tagged_with(params[:filter]).page(params[:page])
+          @followed_artists = current_user.followed_artists.tagged_with(followed_artist_params[:filter]).page(followed_artist_params[:page])
         else
-          @followed_artists = current_user.followed_artists.includes(:artist).order("artists.name ASC").page(params[:page])
+          @followed_artists = current_user.followed_artists.includes(:artist).order("artists.name ASC").page(followed_artist_params[:page])
         end
       end
     end
@@ -48,7 +47,7 @@ module Spotify
     private
 
     def followed_artist_params
-      params.require(:followed_artist).permit(:tag_list)
+      params.permit(:tag_list, :page, :filter)
     end
   end
 end
