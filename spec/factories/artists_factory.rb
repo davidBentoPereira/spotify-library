@@ -15,8 +15,8 @@
 #
 FactoryBot.define do
   factory :artist do
-    name { "MyString" }
-    external_link { "MyString" }
-    avatar { nil }
+    name { Faker::Music.band }
+    external_link { Faker::Internet.url }
+    cover_url { Faker::Internet.url }
   end
 end
