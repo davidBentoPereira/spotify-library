@@ -45,8 +45,13 @@ class User < ApplicationRecord
     RSpotify::User.new(spotify_data)
   end
 
-  # TODO: Needs to be optimized, it does 1 query for each followed_artist !!!
   def tags
     self.owned_tags
+  end
+
+  def delete_tags(*tags)
+    ActsAsTaggableOn::Tag.joins(:taggings).where(taggings: { tagger_id: self.id }).where(tags: { name: tags}).destroy_all
+
+    self.tags.reload
   end
 end
