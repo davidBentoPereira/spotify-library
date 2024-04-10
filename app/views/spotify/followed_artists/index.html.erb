@@ -24,7 +24,7 @@
         <!-- Artist list -->
         <div class="grid gap-x-20 gap-y-4 xl:grid-cols-4 lg:grid-cols-3 grid-cols-1 sm:grid-cols-2 my-8">
           <% @followed_artists.each do |followed_artist| %>
-            <%= render "artist", artist: followed_artist.artist %>
+            <%= render "artist", followed_artist: followed_artist %>
           <% end %>
         </div>
 

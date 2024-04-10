@@ -7,7 +7,6 @@ module Spotify
         @tags = current_user.tags
 
         if params[:filter].present?
-          # TODO: Safety check on param :filter before using it
           @followed_artists = current_user.followed_artists.tagged_with(followed_artist_params[:filter]).page(followed_artist_params[:page])
         else
           @followed_artists = current_user.followed_artists.includes(:artist).order("artists.name ASC").page(followed_artist_params[:page])
@@ -15,24 +14,21 @@ module Spotify
       end
     end
 
-    def show
-      @followed_artist = FollowedArtist.find(params[:id])
-    end
-
+    # Only allow to edit the tags on a followed_artist
     def edit
-      @followed_artist = FollowedArtist.find_by(artist_id: params[:id])
+      @followed_artist = FollowedArtist.find_by(artist_id: params[:id], user_id: current_user.id)
       @selected_tags = @followed_artist.tags
     end
 
+    # Only allow to fetch the followed artists from Spotify
     def create
-      #
       SpotifyService.new(current_user).fetch_and_load_artists
 
       head :ok
     end
 
 
-    # Only allow to edit the tags on a followed_artist
+    # Only allow to update the tags on a followed_artist
     def update
       @followed_artist = FollowedArtist.find(params[:id])
       tags = params[:followed_artist][:tag_list].reject(&:blank?).join(", ").strip

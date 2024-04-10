@@ -2,9 +2,9 @@
   <div class="flex flex-col items-center">
 
     <!-- Artist cover -->
-    <%= link_to(artist.external_link, {target: "_blank"} ) do %>
+    <%= link_to(followed_artist.artist.external_link, {target: "_blank"} ) do %>
       <div class="h-24 w-24 flex items-center justify-center rounded-full overflow-hidden">
-        <%= image_tag(artist.cover_url, class: "h-full w-full object-cover") if artist.cover_url.present? %>
+        <%= image_tag(followed_artist.artist.cover_url, class: "h-full w-full object-cover") if followed_artist.artist.cover_url.present? %>
       </div>
     <% end %>
   </div>
@@ -15,16 +15,16 @@
 
     <div class='inline-flex'>
       <!-- Artist Name -->
-      <%= link_to(artist.name, artist.external_link, {target: "_blank", class: "text-white text-sm font-medium hover:font-bold"} ) %>
+      <%= link_to(followed_artist.artist.name, followed_artist.artist.external_link, {target: "_blank", class: "text-white text-sm font-medium hover:font-bold"} ) %>
       <!-- Edit Link -->
-      <%= link_to edit_spotify_followed_artist_path(artist), class: "ml-auto inline-flex items-center gap-x-1.5 rounded-md px-2 py-0.5 text-xs font-medium text-gray-400 shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" do %>
+      <%= link_to edit_spotify_followed_artist_path(followed_artist.artist), class: "ml-auto inline-flex items-center gap-x-1.5 rounded-md px-2 py-0.5 text-xs font-medium text-gray-400 shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" do %>
         <%= heroicon "pencil", options: { class: "-ml-0.5 h-3 w-3" } %> Edit
       <% end %>
     </div>
 
     <!-- Artist tags -->
     <div class='flex flex-wrap'>
-      <% tag_cloud(artist.tags, badge_css_classes) do |tag, css_class| %>
+      <% tag_cloud(followed_artist.tags, badge_css_classes) do |tag, css_class| %>
         <%= link_to spotify_followed_artists_path(filter: tag.name) do %>
           <span class="<%= css_class %> m-1"><%= tag %></span>
         <% end %>
