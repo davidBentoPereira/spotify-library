@@ -28,7 +28,7 @@
           <% end %>
         </div>
 
-        <div class='container text-white text-md'>
+        <div data-controller="pagination" class='container text-white text-md'>
           <%= paginate @followed_artists, remote: true, class: "mx-auto" %>
         </div>
       <% end %>
