@@ -1,17 +1,19 @@
 module Spotify
   class FollowedArtistsController < ApplicationController
     def index
-      if current_user&.spotify_data?
-        @followed_artists_count = current_user.artists.count
-        @page = params[:page] || 1
-        @tags = current_user.tags
+      return unless current_user&.spotify_data?
 
+      @tags = current_user.tags
+      @followed_artists_count = current_user.artists.count
+      @page = followed_artist_params[:page] || 1
+      followed_artists_query = current_user.followed_artists.includes(:artist)
+
+      @followed_artists =
         if params[:filter].present?
-          @followed_artists = current_user.followed_artists.tagged_with(followed_artist_params[:filter]).page(followed_artist_params[:page])
+          followed_artists_query.tagged_with(followed_artist_params[:filter]).order("artists.name ASC").page(@page)
         else
-          @followed_artists = current_user.followed_artists.includes(:artist).order("artists.name ASC").page(followed_artist_params[:page])
+          followed_artists_query.order("artists.name ASC").page(@page)
         end
-      end
     end
 
     # Only allow to edit the tags on a followed_artist
