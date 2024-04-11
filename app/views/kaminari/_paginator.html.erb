@@ -20,7 +20,6 @@
     </div>
 
     <!-- Desktop Display -->
-
     <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
       <div>
         <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
@@ -40,5 +39,14 @@
         </nav>
       </div>
     </div>
-  </div>
-<% end %>
+
+    <!-- Input to change number of results per page -->
+    <div class="flex justify-center my-4">
+      <%= select_tag 'select_limit', options_for_select([10, 25, 50, 100], params[:limit]),
+                     {
+                       class: 'mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset focus:ring-2 focus:ring-green-spotify sm:text-sm sm:leading-6',
+                       data: { action: 'change->pagination#changeResultsPerPage' }
+                     } %>
+    </div>
+  <% end %>
+</div>

@@ -50,4 +50,14 @@ export default class extends Controller {
     const nextPageLink = this.element.querySelector(".next");
     if (nextPageLink) { Turbo.visit(nextPageLink.href); }
   }
+
+  changeResultsPerPage(event) {
+    const newLimit = parseInt(event.target.value, 10);
+    if (!isNaN(newLimit) && newLimit >= 1) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('page', 1);
+      url.searchParams.set('limit', newLimit);
+      Turbo.visit(url.href)
+    }
+  }
 }

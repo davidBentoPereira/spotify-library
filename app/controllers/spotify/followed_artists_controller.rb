@@ -6,6 +6,8 @@ module Spotify
       @tags = current_user.tags
       @page = followed_artist_params[:page].to_i || 1
       @limit = followed_artist_params[:limit] || 16
+      @limit = @limit.to_i
+
       followed_artists_query = current_user.followed_artists.includes(:artist)
 
       @followed_artists =
