@@ -1,0 +1,8 @@
+<% unless current_page.last? %>
+  <%= link_to url, rel: 'next', remote: remote, class: "relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-green-spotify focus:z-20 focus:outline-offset-0 next" do %>
+    <span class="sr-only"><%= t('views.pagination.next').html_safe %></span>
+    <%= heroicon "chevron-double-right", options: { class: "h-5 w-5 text-white" } %>
+  <% end %>
+<% end %>
+
+

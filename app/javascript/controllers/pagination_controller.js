@@ -19,12 +19,12 @@ export default class extends Controller {
   }
 
   loadPreviousPage() {
-    const previousPageLink = this.element.querySelector(".prev").children[0];
+    const previousPageLink = this.element.querySelector(".prev");
     if (previousPageLink) { Turbo.visit(previousPageLink.href); }
   }
 
   loadNextPage() {
-    const nextPageLink = this.element.querySelector(".next").children[0];
+    const nextPageLink = this.element.querySelector(".next");
     if (nextPageLink) { Turbo.visit(nextPageLink.href); }
   }
 

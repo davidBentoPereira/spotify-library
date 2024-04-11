@@ -4,16 +4,19 @@ module Spotify
       return unless current_user&.spotify_data?
 
       @tags = current_user.tags
-      @followed_artists_count = current_user.artists.count
-      @page = followed_artist_params[:page] || 1
+      @page = followed_artist_params[:page].to_i || 1
+      @limit = followed_artist_params[:limit] || 16
       followed_artists_query = current_user.followed_artists.includes(:artist)
 
       @followed_artists =
         if params[:filter].present?
-          followed_artists_query.tagged_with(followed_artist_params[:filter]).order("artists.name ASC").page(@page)
+          followed_artists_query.tagged_with(followed_artist_params[:filter]).order("artists.name ASC").page(@page).per(@limit)
         else
-          followed_artists_query.order("artists.name ASC").page(@page)
+          followed_artists_query.order("artists.name ASC").page(@page).per(@limit)
         end
+
+      @total_count = @followed_artists.total_count.to_i
+      @total_pages = @followed_artists.total_pages.to_i
     end
 
     # Only allow to edit the tags on a followed_artist
@@ -45,7 +48,7 @@ module Spotify
     private
 
     def followed_artist_params
-      params.permit(:tag_list, :page, :filter)
+      params.permit(:tag_list, :page, :limit, :filter)
     end
   end
 end

@@ -33,15 +33,15 @@ en:
   hello: "Hello world"
   login:
     spotify:
-      success: "Successful connection to your Spotify account 🎉"
-      error: "Failed to connect to your Spotify account ❌"
+      success: "Connexion avec votre compte Spotify réussi 🎉"
+      error: "Echec de la connexion à votre compte Spotify ❌"
   views:
     pagination:
-      first: "First"
-      last: "Last"
-      prev: "Previous"
-      next: "Next"
-      showing: "showing"
-      to: "of"
-      of: "to"
-      results: "results"
+      first: "Premier"
+      last: "Dernier"
+      prev: "Précédent"
+      next: "Suivant"
+      showing: "Affiche"
+      to: "à"
+      of: "de"
+      results: "éléments"

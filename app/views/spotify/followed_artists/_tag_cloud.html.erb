@@ -1,7 +1,7 @@
-<div data-controller="tag" class='flex flex-wrap mt-5 mb-3 space-x-2'>
+<div data-controller="tag" class="flex flex-wrap mt-5 mb-3 space-x-2">
   <!-- Fixed Tag "All" -->
   <%= link_to spotify_followed_artists_path do %>
-    <button class="<%= badge_css_classes.first %> mb-2">All (<%= @followed_artists_count %>)</button>
+    <button class="<%= badge_css_classes.first %> mb-2">All (<%= @total_count %>)</button>
   <% end %>
   <!-- "Dynamic" Tags -->
   <% tag_cloud(tags, badge_css_classes) do |tag, css_class| %>
@@ -16,8 +16,3 @@
 
   <%= render "spotify/followed_artists/tag_panel", tags: tags %>
 </div>
-
-
-
-
-
