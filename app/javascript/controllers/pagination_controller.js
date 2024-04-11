@@ -8,14 +8,37 @@ export default class extends Controller {
   }
 
   handleKeyDown(event) {
-    switch(event.key) {
-      case "ArrowLeft":
-        this.loadPreviousPage();
-        break;
-      case "ArrowRight":
-        this.loadNextPage();
-        break;
+    if (event.metaKey || event.ctrlKey) { // Check if key CMD or CTRL is pressed
+      switch(event.key) {
+        case "ArrowLeft":
+          event.preventDefault();
+          this.loadFirstPage();
+          break;
+        case "ArrowRight":
+          event.preventDefault();
+          this.loadLastPage();
+          break;
+      }
+    } else {
+      switch(event.key) {
+        case "ArrowLeft":
+          this.loadPreviousPage();
+          break;
+        case "ArrowRight":
+          this.loadNextPage();
+          break;
+      }
     }
+  }
+
+  loadFirstPage() {
+    const firstPageLink = this.element.querySelector(".first");
+    if (firstPageLink) { Turbo.visit(firstPageLink.href); }
+  }
+
+  loadLastPage() {
+    const lastPageLink = this.element.querySelector(".last");
+    if (lastPageLink) { Turbo.visit(lastPageLink.href); }
   }
 
   loadPreviousPage() {
@@ -27,6 +50,4 @@ export default class extends Controller {
     const nextPageLink = this.element.querySelector(".next");
     if (nextPageLink) { Turbo.visit(nextPageLink.href); }
   }
-
-
 }
