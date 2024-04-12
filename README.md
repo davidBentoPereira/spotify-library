@@ -1,4 +1,16 @@
-# Spotify Library - The custom interface to visualize it's followed artists
+# Spotify Library
+
+A custom Spotify interface to visualize your followed artists and sort them by custom tags
+
+<img src="./app/assets/images/spotify_library_screen1.png">
+
+## Why this project ?
+
+This side project is dedicated to 3 main goals:
+
+1. 💡 solving a personal problem that I have when listening music on Spotify : I'm always listening to the same artists because I can't visualize them with good filters like their genres, custom tags, grid view or list, etc...
+2. 📈 improving my skills as Web Developper on Ruby on Rails by consuming an external API, creatings features, managing deployments
+3. 👨‍🏫 Learning how to use Rails 7 importmap feature, Hotwire, Stimulus and Turbo
 
 ## Setup
 
@@ -24,3 +36,16 @@
 
 * All runtime configuration should be supplied in the UNIX environment
 * Rails logging uses lograge. `bin/setup help` can tell you how to see this locally
+
+## Features
+
+- Fetch your followed artists from Spotify
+- Add custom tags on each artists
+- Filter your artists by tags
+- Navigate through your followed artists with the pagination or with [`⬅ / ➡`] [`⌘ + ⬅ / ➡`] 
+
+## Authors
+
+- [@davidBentoPereira](https://github.com/davidBentoPereira) (author)
+- [@crysicia](https://github.com/Crysicia) (contributor)
+
