@@ -1,15 +1,14 @@
 module Spotify
   class FollowedArtistsController < ApplicationController
+
     def index
       return unless current_user&.spotify_data?
 
       @tags = current_user.tags
       @page = followed_artist_params[:page].to_i || 1
-      @limit = followed_artist_params[:limit] || 16
-      @limit = @limit.to_i
+      @limit = (followed_artist_params[:limit] || 16).to_i
 
       followed_artists_query = current_user.followed_artists.includes(:artist)
-
       @followed_artists =
         if params[:filter].present?
           followed_artists_query.tagged_with(followed_artist_params[:filter]).order("artists.name ASC").page(@page).per(@limit)

@@ -9,12 +9,12 @@ Rails.application.routes.draw do
   #   #############################################
   #  ############### Canonical Routes ############
   # #############################################
+
   resources :tags, only: [:destroy]
   namespace :spotify do
     resources :sessions, only: [:create]
     resources :followed_artists, only: [:index, :edit, :create, :update]
   end
-
 
   #   ###########################################
   #  ############### Custom Routes #############

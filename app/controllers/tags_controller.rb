@@ -1,4 +1,5 @@
 class TagsController < ApplicationController
+  before_action :load_tag, only: [:destroy]
   # def new
   #   # TODO: Allow to create a tag with a name and a colour and associate it to the user
   # end
@@ -8,7 +9,7 @@ class TagsController < ApplicationController
   # end
   #
   # def create
-  #
+  #   # TODO: Allow to create a tag with a name and a colour and associate it to the user
   # end
   #
   # def update
@@ -16,8 +17,7 @@ class TagsController < ApplicationController
   # end
   
   def destroy
-    tag_to_delete = ActsAsTaggableOn::Tag.find(params[:id]).name
-    current_user.delete_tags(tag_to_delete)
+    current_user.delete_tags(@tag)
 
     if current_user.delete_tags(tag_params[:tag])
       redirect_to spotify_followed_artists_path
@@ -27,6 +27,10 @@ class TagsController < ApplicationController
   end
 
   private
+
+  def load_tag
+    @tag = ActsAsTaggableOn::Tag.find(tag_params[:id]).name
+  end
 
   def tag_params
     params.permit(:id, :tag)
