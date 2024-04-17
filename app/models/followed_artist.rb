@@ -19,6 +19,10 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class FollowedArtist < ApplicationRecord
-  belongs_to :user
-  belongs_to :artist
+  belongs_to :user, optional: false
+  belongs_to :artist, optional: false
+  acts_as_taggable_on :tags
+
+  validates :user_id, presence: true
+  validates :artist_id, presence: true
 end

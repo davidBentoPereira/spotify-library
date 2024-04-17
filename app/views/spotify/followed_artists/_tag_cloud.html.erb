@@ -1,0 +1,18 @@
+<div data-controller="tag" class="flex flex-wrap mt-5 mb-3 space-x-2">
+  <!-- Fixed Tag "All" -->
+  <%= link_to spotify_followed_artists_path do %>
+    <button class="<%= badge_css_classes.first %> mb-2">All (<%= @total_count %>)</button>
+  <% end %>
+  <!-- "Dynamic" Tags -->
+  <% tag_cloud(tags, badge_css_classes) do |tag, css_class| %>
+    <%= link_to spotify_followed_artists_path(filter: tag.name) do %>
+      <button class="<%= css_class %> mb-2"><%= "#{tag.name} (#{tag.taggings_count})" %></button>
+    <% end %>
+  <% end %>
+  <!-- Button "Edit Tags" -->
+  <button data-action="tag#togglePanel" class="<%= badge_css_classes.first %> mb-2">
+    <%= heroicon "pencil", options: { class: "-ml-0.5 h-3 w-3 mr-1" } %> Edit tags
+  </button>
+
+  <%= render "spotify/followed_artists/tag_panel", tags: tags %>
+</div>

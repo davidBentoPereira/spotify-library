@@ -1,0 +1,53 @@
+<style>
+    .slim-select-style .ss-content {
+        background-color: transparent !important;
+        border: none;
+        color: white;
+        /* Ajoutez d'autres styles personnalisés ici */
+    }
+
+    .ss-main .ss-values .ss-value {
+        background-color: #1DB954
+    }
+
+    .ss-content:hover .ss-list:hover .ss-option:hover {
+        background-color: #1DB954
+    }
+</style>
+
+<div class='container mx-auto w-3/12 py-12'>
+  <!-- Form Start -->
+  <%= form_with model: @followed_artist, url: spotify_followed_artist_path(@followed_artist), method: :put do |form| %>
+    <div class="space-y-12">
+      <div class="border-b border-gray-900/10">
+        <h2 class="text-base font-semibold leading-7 text-white">Edit Tags for <span class='text-green-spotify font-bold text-md'><%= @followed_artist.artist.name %></span></h2>
+
+        <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div class="sm:col-span-4">
+            <%#= form.label :tag_list, "Tags", class: "block text-sm font-medium leading-6 text-white" %>
+            <div class="mt-2">
+              <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-white-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-green-spotify sm:max-w-md">
+                <%= form.select :tag_list, options_for_select(current_user.owned_tags, @followed_artist.tags), { }, { multiple: true, data: { controller: "slim" }, class: "" } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="mt-6 flex items-center justify-end gap-x-6">
+      <!-- Cancel Button -->
+      <%= button_to spotify_followed_artists_path, class: "inline-flex items-center gap-x-1.5 rounded px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-50 hover:text-gray-700" do %>
+        <%= heroicon "arrow-left", options: { class: "-ml-0.5 h-5 w-5" } %>
+        Cancel
+      <% end %>
+      <!-- Submit Button -->
+      <button type="submit" class="inline-flex items-center gap-x-1.5 rounded-md bg-green-spotify px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+        <%= heroicon "check", options: { class: "-ml-0.5 h-5 w-5" } %>
+        Update
+      </button>
+    </div>
+  <% end %>
+  <!-- Form End -->
+</div>

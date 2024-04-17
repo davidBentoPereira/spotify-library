@@ -24,6 +24,10 @@ FactoryBot.define do
     email { Faker::Internet.email }
     password { Faker::Internet.password(min_length: 10, max_length: 20) }
 
+    transient do
+      followed_artist_count { 2 }
+    end
+
     trait :with_spotify_data do
       spotify_data do
         {
@@ -62,6 +66,12 @@ FactoryBot.define do
             expires: false
           }
         }
+      end
+    end
+
+    trait :with_followed_artists do
+      after(:create) do |user, evaluator|
+        create_list(:followed_artist, evaluator.followed_artist_count, :with_tags, user: user)
       end
     end
   end

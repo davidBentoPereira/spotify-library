@@ -1,0 +1,52 @@
+<div data-controller="pagination" class="flex flex-col items-center justify-center border-t border-gray-200 px-4 py-3 sm:px-6">
+  <%= paginator.render do %>
+    <!-- pagination-info -->
+    <div class="mb-2">
+      <p class="text-sm text-white">
+        <%= t('views.pagination.showing').html_safe %>
+        <span class="font-medium"><%= (current_page.to_i - 1) * limit + 1 %></span>
+        <%= t('views.pagination.to').html_safe %>
+        <span class="font-medium"><%= [current_page.to_i * limit, total_count].min %></span>
+        <%= t('views.pagination.of').html_safe %>
+        <span class="font-medium"><%= total_count %></span>
+        <%= t('views.pagination.results').html_safe %>
+      </p>
+    </div>
+
+    <!-- Mobile Display -->
+    <div class="flex flex-1 justify-between sm:hidden">
+      <%= prev_page_tag unless current_page.first? %>
+      <%= next_page_tag unless current_page.last? %>
+    </div>
+
+    <!-- Desktop Display -->
+    <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+      <div>
+        <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+          <%= prev_page_tag unless current_page.first? %>
+          <%= first_page_tag unless current_page <= 6 %>
+          <% each_page do |page| %>
+            <% if page.display_tag? -%>
+              <%= page_tag page %>
+            <% elsif !page.was_truncated? -%>
+              <%= gap_tag %>
+            <% end %>
+          <% end %>
+          <% unless current_page.out_of_range? %>
+            <%= last_page_tag unless current_page >= (total_pages - 5) %>
+            <%= next_page_tag unless current_page.last? %>
+          <% end %>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Input to change number of results per page -->
+    <div class="flex justify-center my-4">
+      <%= select_tag 'select_limit', options_for_select([10, 25, 50, 100], params[:limit]),
+                     {
+                       class: 'mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset focus:ring-2 focus:ring-green-spotify sm:text-sm sm:leading-6',
+                       data: { action: 'change->pagination#changeResultsPerPage' }
+                     } %>
+    </div>
+  <% end %>
+</div>

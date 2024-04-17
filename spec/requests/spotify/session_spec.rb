@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Spotify::SessionController, type: :request do
+RSpec.describe Spotify::SessionsController, type: :request do
   describe 'POST /auth/spotify/callback' do
     # TODO: Write the specs
   end

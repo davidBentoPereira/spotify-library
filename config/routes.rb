@@ -4,17 +4,17 @@ Rails.application.routes.draw do
   devise_for :users
 
   # Defines the root path route ("/")
-  root "home#index"
+  root "spotify/followed_artists#index"
 
   #   #############################################
   #  ############### Canonical Routes ############
   # #############################################
-  resources :home, only: [:index]
-  namespace :spotify do
-    resources :session, only: [:create]
-    resources :artist, only: [:create]
-  end
 
+  resources :tags, only: [:destroy]
+  namespace :spotify do
+    resources :sessions, only: [:create]
+    resources :followed_artists, only: [:index, :edit, :create, :update]
+  end
 
   #   ###########################################
   #  ############### Custom Routes #############
@@ -27,7 +27,7 @@ Rails.application.routes.draw do
   # * Explain anything else non-standard
 
   # Used by Spotify to redirect after Sign In
-  get "/auth/spotify/callback", to: "spotify/session#create"
+  get "/auth/spotify/callback", to: "spotify/sessions#create"
 
   # #########################################
   #  #########################################

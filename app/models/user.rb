@@ -26,6 +26,8 @@ class User < ApplicationRecord
   has_many :followed_artists, dependent: :destroy # TODO: not 100% sure about that
   has_many :artists, through: :followed_artists
 
+  acts_as_tagger
+
   validates :username, :email, presence: true
   # Username must be between 4 and 30 characters long has to contain
   # only lowercase alphabetical characters, numbers and underscores (_)
@@ -34,12 +36,22 @@ class User < ApplicationRecord
 
 
   # def auto_format_username
-    # TODO : Idea 💡 : Add a feature to auto_format the username when user chooses one.
+  # TODO : Idea 💡 : Add a feature to auto_format the username when user chooses one.
   # end
 
   def spotify_user
     raise MissingSpotifyDataError if spotify_data.blank?
 
     RSpotify::User.new(spotify_data)
+  end
+
+  def tags
+    self.owned_tags
+  end
+
+  def delete_tags(*tags)
+    ActsAsTaggableOn::Tag.joins(:taggings).where(taggings: { tagger_id: self.id }).where(tags: { name: tags}).destroy_all
+
+    self.tags.reload
   end
 end

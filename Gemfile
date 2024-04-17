@@ -111,5 +111,9 @@ gem "omniauth-rails_csrf_protection"
 
 # Pagination
 gem "kaminari", "~> 1.2"
-
+# Jobs
 gem "sidekiq", "~> 7.2", ">= 7.2.2"
+# Tags
+gem "acts-as-taggable-on", "~> 10.0"
+# Icons
+gem "heroicon", "~> 1.0"
