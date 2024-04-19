@@ -1,0 +1,13 @@
+.slim-select-style .ss-content {
+    background-color: transparent !important;
+    border: none;
+    color: white;
+}
+
+.ss-main .ss-values .ss-value {
+    background-color: #1DB954
+}
+
+.ss-content:hover .ss-list:hover .ss-option:hover {
+    background-color: #1DB954
+}
