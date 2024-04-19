@@ -15,11 +15,9 @@ class TagsController < ApplicationController
   # def update
   #   # TODO: Allow to rename a tag and give it a colour
   # end
-  
-  def destroy
-    current_user.delete_tags(@tag)
 
-    if current_user.delete_tags(tag_params[:tag])
+  def destroy
+    if current_user.delete_tags(@tag)
       redirect_to spotify_followed_artists_path
     else
       render spotify_followed_artists_path, status: :unprocessable_entity
@@ -33,6 +31,6 @@ class TagsController < ApplicationController
   end
 
   def tag_params
-    params.permit(:id, :tag)
+    params.permit(:id)
   end
 end
