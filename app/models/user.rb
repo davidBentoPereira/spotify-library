@@ -50,8 +50,8 @@ class User < ApplicationRecord
   end
 
   def delete_tags(*tags)
-    ActsAsTaggableOn::Tag.joins(:taggings).where(taggings: { tagger_id: self.id }).where(tags: { name: tags}).destroy_all
+    self.owned_tags.where(tags: { name: tags}).destroy_all
 
-    self.tags.reload
+    self.owned_tags.reload
   end
 end
