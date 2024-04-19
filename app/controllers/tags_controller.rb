@@ -1,5 +1,4 @@
 class TagsController < ApplicationController
-  before_action :load_tag, only: [:destroy]
   # def new
   #   # TODO: Allow to create a tag with a name and a colour and associate it to the user
   # end
@@ -17,6 +16,8 @@ class TagsController < ApplicationController
   # end
 
   def destroy
+    load_tag
+
     if current_user.delete_tags(@tag)
       redirect_to spotify_followed_artists_path
     else
