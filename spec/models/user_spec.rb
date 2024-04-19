@@ -75,20 +75,16 @@ RSpec.describe User, type: :model do
       context "when deleting one tag" do
         context "when user has tags" do
           it "removes the tag" do
-            tags_count_before_delete = user.tags.count
-            user.delete_tags(user.tags.first.name)
-            expect(user.tags.count).to eq(tags_count_before_delete - 1)
+            expect { user.delete_tags(user.tags.first.name) }.to change(user.tags, :count).by(-1)
           end
         end
 
         context "when user has no tags" do
           let(:user) { create(:user) }
-          let(:tag_to_delete) { user.tags.first }
 
           it "does nothing" do
             expect(ActsAsTaggableOn::Tag.count).to eq(0)
-            user.delete_tags("rock")
-            expect(user.tags.count).to eq(0)
+            expect { user.delete_tags("rock") }.to change(user.tags, :count).by(0)
           end
         end
       end
@@ -98,11 +94,7 @@ RSpec.describe User, type: :model do
         let(:tags_to_delete) {  [user.tags.first.name, user.tags.last.name] }
 
         it "deletes the selected tags" do
-          tags_count_before_delete = user.tags.count
-
-          user.delete_tags(*tags_to_delete)
-
-          expect(user.tags.count).to eq(tags_count_before_delete - 2)
+          expect { user.delete_tags(*tags_to_delete) }.to change(user.tags, :count).by(-2)
           tags_to_delete.each do |tag_name|
             expect(user.tags).not_to include(tag_name)
           end
