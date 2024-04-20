@@ -5,9 +5,7 @@ class FollowedArtistsService
 
   def initialize(current_user)
     @current_user = current_user
-    @spotify_user = current_user.spotify_user
   end
-
 
   # TODO: [⚡️Performance Tip] I should :
   #         # - add an attribute spotify_id to Artist
@@ -19,7 +17,7 @@ class FollowedArtistsService
   # @return [void]
   def fetch_and_load_artists
     ActiveRecord::Base.transaction do
-      fetched_artists = fetch_artists
+      fetched_artists = SpotifyService.new(@current_user.spotify_user).fetch_all_followed_artists
       create_new_artists(fetched_artists)
       follow_new_artists(fetched_artists)
       remove_unfollowed_artists(fetched_artists)

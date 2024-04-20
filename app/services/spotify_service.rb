@@ -30,13 +30,13 @@ class SpotifyService
   # of fetched artists reaches the total number of followed artists or the maximum loop count is exceeded.
   #
   # @return [Array<Artist>] An array containing all fetched artists.
-  def fetch_artists
+  def fetch_all_followed_artists
     artists = []
     max_loop = 0
 
     loop do
       max_loop += 1
-      batch_of_fetched_artists = fetch_batch_of_artists(artists.last&.id)
+      batch_of_fetched_artists = fetch_batch_of_followed_artists(artists.last&.id)
       artists.concat(batch_of_fetched_artists)
 
       # Break the loop if:
@@ -61,7 +61,7 @@ class SpotifyService
   #   - cover
   #   - (to come: spotify_id)
   #   - (to come: genres)
-  def fetch_batch_of_artists(last_artist_id)
+  def fetch_batch_of_followed_artists(last_artist_id)
     @spotify_user.following(type: 'artist', limit: SPOTIFY_MAX_LIMIT_PER_PAGE, after: last_artist_id)
   rescue RestClient::ExceptionWithResponse => e
     Rails.logger.error("Error fetching batch of artists from Spotify: #{e.message}")

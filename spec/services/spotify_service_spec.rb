@@ -43,7 +43,7 @@ RSpec.describe SpotifyService do
       let(:artists_per_batch) { 10 }
 
       before do
-        allow(spotify_service).to receive(:fetch_batch_of_artists) do |last_artist_id|
+        allow(spotify_service).to receive(:fetch_batch_of_followed_artists) do |last_artist_id|
           # Create a batch of fake artists for the test
           if last_artist_id.nil?
             (1..artists_per_batch).map { |i| Artist.new(id: i, name: "Artist #{i}") }
@@ -56,7 +56,7 @@ RSpec.describe SpotifyService do
       end
 
       it "fetch all followed artists from Spotify" do
-        fetched_artists = spotify_service.send(:fetch_artists)
+        fetched_artists = spotify_service.send(:fetch_all_followed_artists)
 
         expect(fetched_artists.size).to eq(total_followed_artists)
       end
@@ -64,11 +64,11 @@ RSpec.describe SpotifyService do
   end
 
   describe "private methods" do
-    describe '#fetch_batch_of_artists' do
+    describe '#fetch_batch_of_followed_artists' do
       let(:last_artist_id) { '123456' }
       let(:args) { { type: 'artist', limit: described_class::SPOTIFY_MAX_LIMIT_PER_PAGE, after: last_artist_id } }
 
-      subject(:fetch_batch_of_artists) { spotify_service.send(:fetch_batch_of_artists, last_artist_id) }
+      subject(:fetch_batch_of_followed_artists) { spotify_service.send(:fetch_batch_of_followed_artists, last_artist_id) }
 
       context 'when the Spotify API call is successful' do
         let(:artists) { [double('Artist')] }
@@ -76,7 +76,7 @@ RSpec.describe SpotifyService do
         before { allow(current_user).to receive_message_chain(:spotify_user, :following).with(args).and_return(artists) }
 
         it 'returns an array of artists' do
-          expect(fetch_batch_of_artists).to eq(artists)
+          expect(fetch_batch_of_followed_artists).to eq(artists)
         end
       end
 
@@ -87,12 +87,12 @@ RSpec.describe SpotifyService do
         before { allow(current_user).to receive_message_chain(:spotify_user, :following).with(args).and_raise(error) }
 
         it 'returns nil' do
-          expect(fetch_batch_of_artists).to be_nil
+          expect(fetch_batch_of_followed_artists).to be_nil
         end
 
         it 'logs an error' do
           expect(Rails.logger).to receive(:error).with(/Error fetching batch of artists from Spotify:/)
-          fetch_batch_of_artists
+          fetch_batch_of_followed_artists
         end
       end
     end
