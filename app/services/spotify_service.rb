@@ -1,13 +1,12 @@
-require 'json'
+require 'open-uri'
 
 class SpotifyService
   SPOTIFY_MAX_LIMIT_PER_PAGE = 50
 
-  attr_reader :current_user
+  attr_reader :spotify_user
 
-  def initialize(current_user)
-    @current_user = current_user
-    @spotify_user = current_user.spotify_user
+  def initialize(spotify_user)
+    @spotify_user = spotify_user
   end
 
   # Retrieves the total number of artists followed by the current user from Spotify.
@@ -17,32 +16,13 @@ class SpotifyService
   # @return [Integer] The total number of artists followed by the current user.
   def total_followed_artists
     RSpotify.raw_response = true
-    count = JSON.parse(@current_user.spotify_user.following(type: 'artist'))["artists"]["total"]
+    count = JSON.parse(@spotify_user.following(type: 'artist'))["artists"]["total"]
     RSpotify.raw_response = false
 
     count
   rescue => e
     Rails.logger.error("Unexpected error when fetching total followed artists from Spotify: #{e.message}")
   end
-
-  # TODO: [⚡️Performance Tip] I should :
-  #         # - add an attribute spotify_id to Artist
-  #         # - create a table index on spotify_id
-  #         # - do the find_or_create_by on artist.spotify_id
-  #         # Peformance will be better by searching on an Integer than on a String
-  # Fetches artists from Spotify and loads them into the database, associating them with the current user.
-  #
-  # @return [void]
-  def fetch_and_load_artists
-    ActiveRecord::Base.transaction do
-      fetched_artists = fetch_artists
-      create_new_artists(fetched_artists)
-      follow_new_artists(fetched_artists)
-      remove_unfollowed_artists(fetched_artists)
-    end
-  end
-
-  private
 
   # Fetches all followed artists of the current user from Spotify.
   #
@@ -69,30 +49,7 @@ class SpotifyService
     artists
   end
 
-
-  # Create new artists in the database.
-  #
-  # This method takes an array of fetched artists and filters out the ones that are not already existing
-  # in the database. It then inserts the new artists into the database.
-  #
-  # @param fetched_artists [Array<Artist>] An array of artists fetched from an external source.
-  # @return [void]
-  def create_new_artists(fetched_artists)
-    new_artists = new_artists_to_create(fetched_artists)
-    create_artists_in_db(new_artists)
-  end
-
-  # TODO: There may be an extra step here that could be optimized...
-  def follow_new_artists(fetched_artists)
-    # Get the uniq artists not already followed by the user
-    new_artists_to_follow = artists_to_follow(fetched_artists)
-
-    # Fetch artist IDs for newly created and existing artists
-    artist_ids_to_follow = Artist.where(name: new_artists_to_follow.map(&:name)).pluck(:id)
-
-    # Attach new artists to the current user
-    @current_user.followed_artists.create!(artist_ids_to_follow.map { |artist_id| { artist_id: artist_id } })
-  end
+  private
 
   # Use Spotify's API to fetch a batch of followed artists for current_user
   #
@@ -105,59 +62,9 @@ class SpotifyService
   #   - (to come: spotify_id)
   #   - (to come: genres)
   def fetch_batch_of_artists(last_artist_id)
-    @current_user.spotify_user.following(type: 'artist', limit: SPOTIFY_MAX_LIMIT_PER_PAGE, after: last_artist_id)
+    @spotify_user.following(type: 'artist', limit: SPOTIFY_MAX_LIMIT_PER_PAGE, after: last_artist_id)
   rescue RestClient::ExceptionWithResponse => e
     Rails.logger.error("Error fetching batch of artists from Spotify: #{e.message}")
     nil
-  end
-
-  # Filter out artists from the fetched list that are not already present in the database.
-  #
-  # This method takes an array of fetched artists and compares their names with
-  # the names of artists already existing in the database. It returns a new array
-  # containing only the artists from the fetched list that are not present in the database.
-  #
-  # @param fetched_artists [Array<Artist>] An array of artists fetched from an external source.
-  # @return [Array<Artist>] An array of artists to be created in the database.
-  # TODO: Try to improve this method by searching existing artists by their Spotify_id rather than their names
-  def new_artists_to_create(fetched_artists)
-    existing_artist_names = Artist.where(name: fetched_artists.map(&:name)).pluck(:name)
-    fetched_artists.reject { |followed_artist| existing_artist_names.include?(followed_artist.name) }
-  end
-
-  # Filter out new followed artists from the fetched list that are not already linked to the user.
-  #
-  # This method takes an array of fetched artists and compares their names with
-  # the names of artists already followed by the current user. It returns a new array
-  # containing only the artists from the fetched list that are not already followed by the user.
-  #
-  # @param fetched_artists [Array<Artist>] An array of artists fetched from an external source.
-  # @return [Array<Artist>] An array of new artists to be followed by the user.
-  # TODO: Try to improve this method by searching existing artists by their Spotify_id rather than their names
-  def artists_to_follow(fetched_artists)
-    existing_followed_artists_names = @current_user.artists.where(name: fetched_artists.map(&:name)).pluck(:name)
-    fetched_artists.reject { |followed_artist| existing_followed_artists_names.include?(followed_artist.name) }
-  end
-
-  # TODO: Use gem active import to manage insert_all
-  def create_artists_in_db(spotify_artists_to_create)
-    unless spotify_artists_to_create.empty?
-      Artist.insert_all(spotify_artists_to_create.map { |artist| { name: artist.name, external_link: artist.uri, cover_url: artist.images.last&.dig("url") }  }, unique_by: :name)
-    end
-  end
-
-  # Removes unfollowed artists from the current user's followed artists.
-  #
-  # @param all_followed_artists [Array<Artist>] the list of all followed artists fetched from Spotify
-  # @return [void]
-  def remove_unfollowed_artists(all_followed_artists)
-    prev_followed_artist_names = @current_user.artists.pluck(:name)
-    new_followed_artists_names = all_followed_artists.map(&:name)
-    artists_names_to_unfollow = prev_followed_artist_names - new_followed_artists_names
-
-    return if artists_names_to_unfollow.empty?
-
-    artists_ids_to_delete = @current_user.artists.where(name: artists_names_to_unfollow).pluck(:id)
-    @current_user.followed_artists.where(artist_id: artists_ids_to_delete).destroy_all
   end
 end
