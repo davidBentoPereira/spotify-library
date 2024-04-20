@@ -140,7 +140,7 @@ RSpec.describe SpotifyService do
   end
 
   describe "#artists_to_create_in_db" do
-    subject(:artists_to_create) { spotify_service.send(:artists_to_create_in_db, fetched_artists) }
+    subject(:artists_to_create) { spotify_service.send(:new_artists_to_create, fetched_artists) }
 
     context "when there are artists to create" do
       let!(:existing_artist) { create(:artist, name: "Existing Artist 1")}

@@ -35,25 +35,9 @@ class SpotifyService
   # @return [void]
   def fetch_and_load_artists
     ActiveRecord::Base.transaction do
-      # Fetch current user's followed artists
       fetched_artists = fetch_artists
-
-      # TODO: Group these two methods in a method called create_new_artists
-      # Get new artists to be created and not already existing in the DB
-      spotify_artists_to_create = artists_to_create_in_db(fetched_artists)
-      # Insert new artists in the DB
-      create_artists_in_db(spotify_artists_to_create)
-
-      # TODO: Group these three methods in a method called follow_new_artists
-      # TODO: There may be an extra step here that could be optimized...
-      # Get the uniq artists not already followed by the user
-      new_artists_to_follow = artists_to_follow(fetched_artists)
-      # Fetch artist IDs for newly created and existing artists
-      artist_ids_to_follow = Artist.where(name: new_artists_to_follow.map(&:name)).pluck(:id)
-      # Attach new artists to the current user
-      @current_user.followed_artists.create!(artist_ids_to_follow.map { |artist_id| { artist_id: artist_id } })
-
-      # Remove unfollowed artists
+      create_new_artists(fetched_artists)
+      follow_new_artists(fetched_artists)
       remove_unfollowed_artists(fetched_artists)
     end
   end
@@ -85,6 +69,31 @@ class SpotifyService
     artists
   end
 
+
+  # Create new artists in the database.
+  #
+  # This method takes an array of fetched artists and filters out the ones that are not already existing
+  # in the database. It then inserts the new artists into the database.
+  #
+  # @param fetched_artists [Array<Artist>] An array of artists fetched from an external source.
+  # @return [void]
+  def create_new_artists(fetched_artists)
+    new_artists = new_artists_to_create(fetched_artists)
+    create_artists_in_db(new_artists)
+  end
+
+  # TODO: There may be an extra step here that could be optimized...
+  def follow_new_artists(fetched_artists)
+    # Get the uniq artists not already followed by the user
+    new_artists_to_follow = artists_to_follow(fetched_artists)
+
+    # Fetch artist IDs for newly created and existing artists
+    artist_ids_to_follow = Artist.where(name: new_artists_to_follow.map(&:name)).pluck(:id)
+
+    # Attach new artists to the current user
+    @current_user.followed_artists.create!(artist_ids_to_follow.map { |artist_id| { artist_id: artist_id } })
+  end
+
   # Use Spotify's API to fetch a batch of followed artists for current_user
   #
   # @param last_artist_id [String] The ID of the last artist in the previous batch
@@ -111,7 +120,7 @@ class SpotifyService
   # @param fetched_artists [Array<Artist>] An array of artists fetched from an external source.
   # @return [Array<Artist>] An array of artists to be created in the database.
   # TODO: Try to improve this method by searching existing artists by their Spotify_id rather than their names
-  def artists_to_create_in_db(fetched_artists)
+  def new_artists_to_create(fetched_artists)
     existing_artist_names = Artist.where(name: fetched_artists.map(&:name)).pluck(:name)
     fetched_artists.reject { |followed_artist| existing_artist_names.include?(followed_artist.name) }
   end
