@@ -2,6 +2,7 @@ require 'open-uri'
 
 class SpotifyService
   SPOTIFY_MAX_LIMIT_PER_PAGE = 50
+  MAX_LOOP = 10
 
   attr_reader :spotify_user
 
@@ -32,10 +33,10 @@ class SpotifyService
   # @return [Array<Artist>] An array containing all fetched artists.
   def fetch_all_followed_artists
     artists = []
-    max_loop = 0
+    count_loop = 0
 
     loop do
-      max_loop += 1
+      count_loop += 1
       batch_of_fetched_artists = fetch_batch_of_followed_artists(artists.last&.id)
       artists.concat(batch_of_fetched_artists)
 
@@ -43,7 +44,7 @@ class SpotifyService
       # - The batch of fetched artists is empty.
       # - The total number of fetched artists exceeds or equals the total number of followed artists.
       # - The maximum loop count exceeds 100.
-      break if batch_of_fetched_artists.empty? || artists.size >= total_followed_artists || max_loop > 100
+      break if batch_of_fetched_artists.empty? || artists.size >= total_followed_artists || count_loop > MAX_LOOP
     end
 
     artists

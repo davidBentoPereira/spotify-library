@@ -38,27 +38,44 @@ RSpec.describe SpotifyService do
       end
     end
 
-    describe "#fetch_artists" do
-      let(:total_followed_artists) { 50 }
-      let(:artists_per_batch) { 10 }
+    describe "#fetch_all_followed_artists" do
+      let(:artist1) { double('Artist', id: '123') }
+      let(:artist2) { double('Artist', id: '456') }
+      let(:artist3) { double('Artist', id: '789') }
+      let(:fetched_artists_batch1) { [artist1, artist2] }
+      let(:fetched_artists_batch2) { [artist3] }
+      let(:fetched_artists_batch3) { [] }
 
       before do
-        allow(spotify_service).to receive(:fetch_batch_of_followed_artists) do |last_artist_id|
-          # Create a batch of fake artists for the test
-          if last_artist_id.nil?
-            (1..artists_per_batch).map { |i| Artist.new(id: i, name: "Artist #{i}") }
-          else
-            last_id = last_artist_id.to_i
-            next_id = last_id + artists_per_batch
-            (last_id + 1..next_id).map { |i| Artist.new(id: i, name: "Artist #{i}") }
-          end
-        end
+        allow(spotify_service).to receive(:total_followed_artists).and_return(3)
+        allow(spotify_service).to receive(:fetch_batch_of_followed_artists).with(nil).and_return(fetched_artists_batch1)
+        allow(spotify_service).to receive(:fetch_batch_of_followed_artists).with('456').and_return(fetched_artists_batch2)
+        allow(spotify_service).to receive(:fetch_batch_of_followed_artists).with('789').and_return(fetched_artists_batch3)
       end
 
-      it "fetch all followed artists from Spotify" do
-        fetched_artists = spotify_service.send(:fetch_all_followed_artists)
+      it 'fetches all followed artists from Spotify' do
+        expect(spotify_service.fetch_all_followed_artists).to eq([artist1, artist2, artist3])
+      end
 
-        expect(fetched_artists.size).to eq(total_followed_artists)
+      it 'calls fetch_batch_of_followed_artists with correct arguments' do
+        expect(spotify_service).to receive(:fetch_batch_of_followed_artists).with(nil)
+        expect(spotify_service).to receive(:fetch_batch_of_followed_artists).with('456')
+        expect(spotify_service).not_to receive(:fetch_batch_of_followed_artists).with('789')
+        spotify_service.fetch_all_followed_artists
+      end
+
+      it 'stops fetching if total number of fetched artists reaches or exceeds total number of followed artists' do
+        allow(spotify_service).to receive(:total_followed_artists).and_return(1)
+        expect(spotify_service).to receive(:fetch_batch_of_followed_artists).with(nil).and_return(fetched_artists_batch1)
+        expect(spotify_service).not_to receive(:fetch_batch_of_followed_artists).with('456')
+        expect(spotify_service).not_to receive(:fetch_batch_of_followed_artists).with('789')
+        spotify_service.fetch_all_followed_artists
+      end
+
+      it 'stops fetching if maximum loop count is exceeded' do
+        stub_const("SpotifyService::MAX_LOOP", -1)
+        expect(spotify_service).to receive(:fetch_batch_of_followed_artists).once
+        spotify_service.fetch_all_followed_artists
       end
     end
   end
