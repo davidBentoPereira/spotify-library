@@ -28,7 +28,7 @@ module Spotify
 
     # Only allow to fetch the followed artists from Spotify
     def create
-      SpotifyService.new(current_user).fetch_and_load_artists
+      FollowedArtistsService.new(current_user).fetch_and_load_artists
 
       head :ok
     end
