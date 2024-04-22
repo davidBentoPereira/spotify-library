@@ -44,9 +44,11 @@ class FollowedArtistsService
     # Get the uniq artists not already followed by the user
     new_artists_to_follow = artists_to_follow(fetched_artists)
 
+    # TODO: extract this code into a method
     # Fetch artist IDs for newly created and existing artists
     artist_ids_to_follow = Artist.where(name: new_artists_to_follow.map(&:name)).pluck(:id)
 
+    # TODO: extract this code into a method
     # Attach new artists to the current user
     @current_user.followed_artists.create!(artist_ids_to_follow.map { |artist_id| { artist_id: artist_id } })
   end

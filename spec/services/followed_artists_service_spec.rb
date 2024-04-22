@@ -13,8 +13,41 @@ RSpec.describe FollowedArtistsService do
   end
 
   describe "public methods" do
-    # TODO: Write specs
-    describe "#fetch_and_load_artists"
+    describe "#fetch_and_load_artists" do
+      let(:fetched_artists) { [
+        double("artist", name: "Artist 1", uri: "spotify:artist:1"),
+        double("artist", name: "Artist 2", uri: "spotify:artist:1"),
+      ] }
+
+      subject(:fetch_and_load_artists) { service.fetch_and_load_artists }
+
+      before do
+        allow_any_instance_of(SpotifyService).to receive(:fetch_all_followed_artists).and_return(fetched_artists)
+        allow_any_instance_of(FollowedArtistsService).to receive(:create_new_artists).with(fetched_artists)
+        allow_any_instance_of(FollowedArtistsService).to receive(:follow_new_artists).with(fetched_artists)
+        allow_any_instance_of(FollowedArtistsService).to receive(:remove_unfollowed_artists).with(fetched_artists)
+      end
+
+      it "fetches all followed artists" do
+        expect_any_instance_of(SpotifyService).to receive(:fetch_all_followed_artists)
+        fetch_and_load_artists
+      end
+
+      it "creates new artists" do
+        expect(service).to receive(:create_new_artists).with(fetched_artists)
+        fetch_and_load_artists
+      end
+
+      it "follows new artists" do
+        expect(service).to receive(:follow_new_artists).with(fetched_artists)
+        fetch_and_load_artists
+      end
+
+      it "removes unfollowed artists" do
+        expect(service).to receive(:remove_unfollowed_artists).with(fetched_artists)
+        fetch_and_load_artists
+      end
+    end
   end
 
   describe "private methods" do
