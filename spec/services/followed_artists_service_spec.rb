@@ -133,9 +133,29 @@ RSpec.describe FollowedArtistsService do
       end
     end
 
-    # TODO: Write specs
     describe "#fetch_artist_ids_to_follow" do
+      subject(:fetch_artist_ids_to_follow) { service.send(:fetch_artist_ids_to_follow, new_artists_to_follow) }
 
+      context "when there are new artists to follow" do
+        let!(:artist1) { create(:artist, name: "Artist 1") }
+        let!(:artist2) { create(:artist, name: "Artist 2") }
+        let!(:artist3) { create(:artist, name: "Artist 3") }
+
+        let(:new_artists_to_follow) { [artist1, artist2] }
+
+        it "returns an array of artist IDs" do
+          expect(fetch_artist_ids_to_follow).to contain_exactly(artist1.id, artist2.id)
+        end
+      end
+
+      context "when there are no new artists to follow" do
+        let!(:existing_artists) { create_list(:artist, 3) }
+        let(:new_artists_to_follow) { [] }
+
+        it "returns an empty array" do
+          expect(fetch_artist_ids_to_follow).to be_empty
+        end
+      end
     end
 
     # TODO: Write specs

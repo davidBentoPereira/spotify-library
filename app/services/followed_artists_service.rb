@@ -97,7 +97,6 @@ class FollowedArtistsService
     Artist.where(name: new_artists_to_follow.map(&:name)).pluck(:id)
   end
 
-
   # Attach new followed artists to the current user.
   #
   # This method takes an array of artist IDs to be followed by the user and associates them with the current user
