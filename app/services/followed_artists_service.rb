@@ -7,11 +7,6 @@ class FollowedArtistsService
     @current_user = current_user
   end
 
-  # TODO: [⚡️Performance Tip] I should :
-  #         # - add an attribute spotify_id to Artist
-  #         # - create a table index on spotify_id
-  #         # - do the find_or_create_by on artist.spotify_id
-  #         # Peformance will be better by searching on an Integer than on a String
   # Fetches artists from Spotify and loads them into the database, associating them with the current user.
   #
   # @return [void]
@@ -38,7 +33,6 @@ class FollowedArtistsService
     create_artists(new_artists)
   end
 
-  # TODO: There may be an extra step here that could be optimized...
   def follow_new_artists(fetched_artists)
     new_artists_to_follow = artists_to_follow(fetched_artists)
     artist_ids_to_follow = fetch_artist_ids_to_follow(new_artists_to_follow)
