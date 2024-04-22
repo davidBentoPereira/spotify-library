@@ -65,6 +65,13 @@ class FollowedArtistsService
     fetched_artists.reject { |followed_artist| existing_artist_names.include?(followed_artist.name) }
   end
 
+  # TODO: Use gem active import to manage insert_all
+  def create_artists_in_db(spotify_artists_to_create)
+    unless spotify_artists_to_create.empty?
+      Artist.insert_all(spotify_artists_to_create.map { |artist| { name: artist.name, external_link: artist.uri, cover_url: artist.images.last&.dig("url") }  }, unique_by: :name)
+    end
+  end
+
   # Filter out new followed artists from the fetched list that are not already linked to the user.
   #
   # This method takes an array of fetched artists and compares their names with
@@ -79,20 +86,13 @@ class FollowedArtistsService
     fetched_artists.reject { |followed_artist| existing_followed_artists_names.include?(followed_artist.name) }
   end
 
-  # TODO: Use gem active import to manage insert_all
-  def create_artists_in_db(spotify_artists_to_create)
-    unless spotify_artists_to_create.empty?
-      Artist.insert_all(spotify_artists_to_create.map { |artist| { name: artist.name, external_link: artist.uri, cover_url: artist.images.last&.dig("url") }  }, unique_by: :name)
-    end
-  end
-
   # Removes unfollowed artists from the current user's followed artists.
   #
-  # @param all_followed_artists [Array<Artist>] the list of all followed artists fetched from Spotify
+  # @param fetched_artists [Array<Artist>] the list of all followed artists fetched from Spotify
   # @return [void]
-  def remove_unfollowed_artists(all_followed_artists)
+  def remove_unfollowed_artists(fetched_artists)
     prev_followed_artist_names = @current_user.artists.pluck(:name)
-    new_followed_artists_names = all_followed_artists.map(&:name)
+    new_followed_artists_names = fetched_artists.map(&:name)
     artists_names_to_unfollow = prev_followed_artist_names - new_followed_artists_names
 
     return if artists_names_to_unfollow.empty?
