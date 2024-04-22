@@ -158,9 +158,28 @@ RSpec.describe FollowedArtistsService do
       end
     end
 
-    # TODO: Write specs
     describe "#attach_new_followed_artists" do
+      subject(:attach_new_followed_artists) { service.send(:attach_new_followed_artists, artist_ids_to_follow) }
 
+      context "when there are new artists to follow" do
+        let!(:artist1) { create(:artist) }
+        let!(:artist2) { create(:artist) }
+        let!(:artist3) { create(:artist) }
+
+        let(:artist_ids_to_follow) { [artist1.id, artist2.id] }
+
+        it "associates the new artists with the current user" do
+          expect { attach_new_followed_artists }.to change(current_user.followed_artists, :count).by(2)
+        end
+      end
+
+      context "when there are no new artists to follow" do
+        let(:artist_ids_to_follow) { [] }
+
+        it "does not associate any new artists with the current user" do
+          expect { attach_new_followed_artists }.not_to change(current_user.followed_artists, :count)
+        end
+      end
     end
 
     describe "#remove_unfollowed_artists" do
