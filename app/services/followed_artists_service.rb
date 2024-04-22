@@ -26,7 +26,6 @@ class FollowedArtistsService
 
   private
 
-
   # Create new artists in the database.
   #
   # This method takes an array of fetched artists and filters out the ones that are not already existing
@@ -41,16 +40,9 @@ class FollowedArtistsService
 
   # TODO: There may be an extra step here that could be optimized...
   def follow_new_artists(fetched_artists)
-    # Get the uniq artists not already followed by the user
     new_artists_to_follow = artists_to_follow(fetched_artists)
-
-    # TODO: extract this code into a method
-    # Fetch artist IDs for newly created and existing artists
-    artist_ids_to_follow = Artist.where(name: new_artists_to_follow.map(&:name)).pluck(:id)
-
-    # TODO: extract this code into a method
-    # Attach new artists to the current user
-    @current_user.followed_artists.create!(artist_ids_to_follow.map { |artist_id| { artist_id: artist_id } })
+    artist_ids_to_follow = fetch_artist_ids_to_follow(new_artists_to_follow)
+    attach_new_followed_artists(artist_ids_to_follow)
   end
 
   # Filter out artists from the fetched list that are not already present in the database.
@@ -86,6 +78,31 @@ class FollowedArtistsService
   def artists_to_follow(fetched_artists)
     existing_followed_artists_names = @current_user.artists.where(name: fetched_artists.map(&:name)).pluck(:name)
     fetched_artists.reject { |followed_artist| existing_followed_artists_names.include?(followed_artist.name) }
+  end
+
+
+  # Fetches the IDs of artists to be followed by the current user.
+  #
+  # This method takes an array of new artists to be followed by the user and retrieves their corresponding
+  # IDs from the database. It returns an array containing the IDs of the artists to be followed.
+  #
+  # @param new_artists_to_follow [Array<Artist>] An array of new artists to be followed by the user.
+  # @return [Array<Integer>] An array containing the IDs of the artists to be followed.
+  def fetch_artist_ids_to_follow(new_artists_to_follow)
+    Artist.where(name: new_artists_to_follow.map(&:name)).pluck(:id)
+  end
+
+
+  # Attach new followed artists to the current user.
+  #
+  # This method takes an array of artist IDs to be followed by the user and associates them with the current user
+  # by creating corresponding records in the followed_artists join table. Each record contains the ID of the artist
+  # to be followed and the ID of the current user.
+  #
+  # @param artist_ids_to_follow [Array<Integer>] An array containing the IDs of the artists to be followed.
+  # @return [void]
+  def attach_new_followed_artists(artist_ids_to_follow)
+    @current_user.followed_artists.create!(artist_ids_to_follow.map { |artist_id| { artist_id: artist_id } })
   end
 
   # Removes unfollowed artists from the current user's followed artists.

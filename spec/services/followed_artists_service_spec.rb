@@ -51,7 +51,7 @@ RSpec.describe FollowedArtistsService do
   end
 
   describe "private methods" do
-    describe "#artists_to_create_in_db" do
+    describe "#new_artists_to_create" do
       subject(:artists_to_create) { service.send(:new_artists_to_create, fetched_artists) }
 
       context "when there are artists to create" do
@@ -71,6 +71,11 @@ RSpec.describe FollowedArtistsService do
           expect(artists_to_create).to be_empty
         end
       end
+    end
+
+    # TODO: Write specs
+    describe "#create_artist_in_db" do
+
     end
 
     describe "#artists_to_follow" do
@@ -99,13 +104,23 @@ RSpec.describe FollowedArtistsService do
       end
     end
 
+    # TODO: Write specs
+    describe "#fetch_artist_ids_to_follow" do
+
+    end
+
+    # TODO: Write specs
+    describe "#attach_new_followed_artists" do
+
+    end
+
     describe "#remove_unfollowed_artists" do
       let!(:current_user) { create(:user, :with_spotify_data, :with_followed_artists, followed_artist_count: 2) }
 
       subject(:remove_unfollowed_artists) { service.send(:remove_unfollowed_artists, fetched_artists) }
 
       context "when some artists were unfollowed" do
-        let(:fetched_artists) { [double("artist", name: current_user.artists.first.name)] }
+        let(:fetched_artists) { [double("artist", name: current_user.artists.first&.name)] }
 
         it "unfollows them" do
           remove_unfollowed_artists
