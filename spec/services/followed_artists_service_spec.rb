@@ -73,9 +73,38 @@ RSpec.describe FollowedArtistsService do
       end
     end
 
-    # TODO: Write specs
-    describe "#create_artist_in_db" do
+    describe "#create_artists" do
+      subject(:create_artists) { service.send(:create_artists, artists) }
 
+      context "when artists array is empty" do
+        let(:artists) { [] }
+
+        it "does not perform any database operation" do
+          expect { create_artists }.not_to change(Artist, :count)
+        end
+      end
+
+      context "when artists array is not empty" do
+        let(:artists) do
+          [
+            double("Artist", name: "Artist 1", uri: "spotify:artist1", images: [{ "url" => "http://example.com/artist1.jpg" }]),
+            double("Artist", name: "Artist 2", uri: "spotify:artist2", images: [{ "url" => "http://example.com/artist2.jpg" }])
+          ]
+        end
+
+        it "creates new records in the artists table" do
+          expect { create_artists }.to change(Artist, :count).by(2)
+        end
+
+        it "creates records with correct attributes" do
+          create_artists
+          artist1 = Artist.find_by(name: "Artist 1")
+          artist2 = Artist.find_by(name: "Artist 2")
+
+          expect(artist1).to have_attributes(name: "Artist 1", external_link: "spotify:artist1", cover_url: "http://example.com/artist1.jpg")
+          expect(artist2).to have_attributes(name: "Artist 2", external_link: "spotify:artist2", cover_url: "http://example.com/artist2.jpg")
+        end
+      end
     end
 
     describe "#artists_to_follow" do

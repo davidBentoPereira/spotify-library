@@ -35,7 +35,7 @@ class FollowedArtistsService
   # @return [void]
   def create_new_artists(fetched_artists)
     new_artists = new_artists_to_create(fetched_artists)
-    create_artists_in_db(new_artists)
+    create_artists(new_artists)
   end
 
   # TODO: There may be an extra step here that could be optimized...
@@ -59,11 +59,22 @@ class FollowedArtistsService
     fetched_artists.reject { |followed_artist| existing_artist_names.include?(followed_artist.name) }
   end
 
+  # Insert artists into the database.
+  #
+  # This method takes an array of artists and inserts them into the database. It creates new records in the artists table
+  # with the provided information for each artist. If the provided array is empty, no database operation is performed.
+  #
+  # @param artists [Array<Hash>] An array containing hashes with information about the artists to be created.
+  #   Each hash should contain the following keys:
+  #   - :name (String): The name of the artist.
+  #   - :external_link (String): The external link to the artist, typically a URI.
+  #   - :cover_url (String): The URL of the artist's cover image.
+  # @return [void]
   # TODO: Use gem active import to manage insert_all
-  def create_artists_in_db(spotify_artists_to_create)
-    unless spotify_artists_to_create.empty?
-      Artist.insert_all(spotify_artists_to_create.map { |artist| { name: artist.name, external_link: artist.uri, cover_url: artist.images.last&.dig("url") }  }, unique_by: :name)
-    end
+  def create_artists(artists)
+    return if artists.empty?
+
+    Artist.insert_all(artists.map { |a| { name: a.name, external_link: a.uri, cover_url: a.images.last&.dig("url") }  }, unique_by: :name)
   end
 
   # Filter out new followed artists from the fetched list that are not already linked to the user.
