@@ -14,8 +14,8 @@ RSpec.describe FollowedArtistsService do
 
   describe "public methods" do
     describe "#fetch_and_load_artists" do
-      let(:artist1) { double('RSpotify::Artist', name: "Artist 1", uri: "spotify:artist1", images: [{ "url" => "https://artist1.jpg" }]) }
-      let(:artist2) { double('RSpotify::Artist', name: "Artist 2", uri: "spotify:artist2", images: [{ "url" => "https://artist2.jpg" }]) }
+      let(:artist1) { build(:artist, name: "Artist 1") }
+      let(:artist2) { build(:artist, name: "Artist 2") }
       let(:fetched_artists) { [artist1, artist2] }
 
       subject(:fetch_and_load_artists) { service.fetch_and_load_artists }
@@ -168,14 +168,15 @@ RSpec.describe FollowedArtistsService do
     end
 
     describe "#remove_unfollowed_artists" do
-      let!(:current_user) { create(:user, :with_spotify_data, :with_followed_artists, followed_artist_count: 2) }
+      let!(:current_user) { create(:user, :with_followed_artists, followed_artist_count: 2) }
 
       subject(:remove_unfollowed_artists) { service.send(:remove_unfollowed_artists, fetched_artists) }
 
       context "when some artists were unfollowed" do
-        let(:fetched_artists) { [double("artist", name: current_user.artists.first&.name)] }
+        let(:fetched_artists) { [build(:artist, name: current_user.artists.first&.name)] }
 
         it "unfollows them" do
+          expect(current_user.artists.count).to eq(2)
           remove_unfollowed_artists
           expect(current_user.artists).to match_array(current_user.artists.first)
         end
@@ -184,9 +185,38 @@ RSpec.describe FollowedArtistsService do
       context "when no artists were unfollowed" do
         let(:existing_artists_names) { current_user.artists.pluck(:name) }
         let(:fetched_artists) { [
-          double("artist", name: current_user.artists.first&.name),
-          double("artist", name: current_user.artists.last&.name),
-          double("artist", name: "New Followed Artist"),
+          build(:artist, name: current_user.artists.first&.name),
+          build(:artist, name: current_user.artists.last&.name),
+          build(:artist),
+        ] }
+
+        it "doesn't unfollow them" do
+          remove_unfollowed_artists
+          expect(current_user.artists.where(name: existing_artists_names).count).to eq(2)
+        end
+      end
+    end
+    describe "#remove_unfollowed_artists" do
+      let!(:current_user) { create(:user, :with_followed_artists, followed_artist_count: 2) }
+
+      subject(:remove_unfollowed_artists) { service.send(:remove_unfollowed_artists, fetched_artists) }
+
+      context "when some artists were unfollowed" do
+        let(:fetched_artists) { [build(:artist, name: current_user.artists.first&.name)] }
+
+        it "unfollows them" do
+          expect(current_user.artists.count).to eq(2)
+          remove_unfollowed_artists
+          expect(current_user.artists).to match_array(current_user.artists.first)
+        end
+      end
+
+      context "when no artists were unfollowed" do
+        let(:existing_artists_names) { current_user.artists.pluck(:name) }
+        let(:fetched_artists) { [
+          build(:artist, name: current_user.artists.first&.name),
+          build(:artist, name: current_user.artists.last&.name),
+          build(:artist),
         ] }
 
         it "doesn't unfollow them" do
