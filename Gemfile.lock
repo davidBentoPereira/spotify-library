@@ -54,6 +54,8 @@ GEM
     activerecord (7.0.8)
       activemodel (= 7.0.8)
       activesupport (= 7.0.8)
+    activerecord-import (1.6.0)
+      activerecord (>= 4.2)
     activestorage (7.0.8)
       actionpack (= 7.0.8)
       activejob (= 7.0.8)
@@ -401,6 +403,7 @@ PLATFORMS
   arm64-darwin-23
 
 DEPENDENCIES
+  activerecord-import (~> 1.6)
   acts-as-taggable-on (~> 10.0)
   annotate
   bootsnap

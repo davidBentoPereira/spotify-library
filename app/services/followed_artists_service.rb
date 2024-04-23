@@ -58,17 +58,24 @@ class FollowedArtistsService
   # This method takes an array of artists and inserts them into the database. It creates new records in the artists table
   # with the provided information for each artist. If the provided array is empty, no database operation is performed.
   #
-  # @param artists [Array<Hash>] An array containing hashes with information about the artists to be created.
+  # @param artists_to_create [Array<Hash>] An array containing hashes with information about the artists to be created.
   #   Each hash should contain the following keys:
   #   - :name (String): The name of the artist.
   #   - :external_link (String): The external link to the artist, typically a URI.
   #   - :cover_url (String): The URL of the artist's cover image.
   # @return [void]
-  # TODO: Use gem active import to manage insert_all
-  def create_artists(artists)
-    return if artists.empty?
+  def create_artists(artists_to_create)
+    return if artists_to_create.empty?
 
-    Artist.insert_all(artists.map { |a| { name: a.name, external_link: a.uri, cover_url: a.images.last&.dig("url") }  }, unique_by: :name)
+    artists = artists_to_create.map do |a|
+      Artist.new(
+        name: a.name,
+        external_link: a.uri,
+        cover_url: a.images.last&.dig("url")
+      )
+    end
+
+    Artist.import(artists)
   end
 
   # Filter out new followed artists from the fetched list that are not already linked to the user.
