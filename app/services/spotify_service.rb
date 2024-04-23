@@ -23,13 +23,12 @@ class SpotifyService
     Rails.logger.error("Unexpected error when fetching total followed artists from Spotify: #{e.message}")
   end
 
-  # This method fetches all followed artists of the current user from Spotify and converts them into an array of Artist objects.
+  # This method fetches all followed artists of the current user from Spotify and converts them into an array of Artist
+  # objects.
   #
   # @return [Array<Artist>] An array containing all fetched artists.
   def artists
-    fetched_artists = fetch_all_followed_artists
-
-    fetched_artists.map do |a|
+    fetch_all_followed_artists.map do |a|
       Artist.new(
         name: a.name,
         external_link: a.uri,

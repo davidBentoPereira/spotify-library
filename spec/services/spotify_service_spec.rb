@@ -8,8 +8,6 @@ RSpec.describe SpotifyService do
 
   describe "public methods" do
     describe "#total_followed_artists" do
-      let(:spotify_user) { instance_double(RSpotify::User) }
-
       before { allow(current_user).to receive(:spotify_user).and_return(spotify_user) }
 
       context 'when the Spotify API returns a valid response' do
@@ -23,10 +21,13 @@ RSpec.describe SpotifyService do
       end
 
       context 'when the Spotify API returns an error response' do
-        before { allow(spotify_user).to receive(:following).with(type: 'artist').and_raise(RestClient::ExceptionWithResponse) }
+        before do
+          allow(spotify_user).to receive(:following).with(type: 'artist').and_raise(RestClient::ExceptionWithResponse)
+        end
 
         it 'logs an error message and returns nil' do
-          expect(Rails.logger).to receive(:error).with(/Unexpected error when fetching total followed artists from Spotify/)
+          error_message = /Unexpected error when fetching total followed artists from Spotify/
+          expect(Rails.logger).to receive(:error).with(error_message)
           expect(service.total_followed_artists).to be_nil
         end
       end
