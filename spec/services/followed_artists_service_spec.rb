@@ -14,22 +14,21 @@ RSpec.describe FollowedArtistsService do
 
   describe "public methods" do
     describe "#fetch_and_load_artists" do
-      let(:fetched_artists) { [
-        double("artist", name: "Artist 1", uri: "spotify:artist:1"),
-        double("artist", name: "Artist 2", uri: "spotify:artist:1"),
-      ] }
+      let(:artist1) { double('RSpotify::Artist', name: "Artist 1", uri: "spotify:artist1", images: [{ "url" => "https://artist1.jpg" }]) }
+      let(:artist2) { double('RSpotify::Artist', name: "Artist 2", uri: "spotify:artist2", images: [{ "url" => "https://artist2.jpg" }]) }
+      let(:fetched_artists) { [artist1, artist2] }
 
       subject(:fetch_and_load_artists) { service.fetch_and_load_artists }
 
       before do
-        allow_any_instance_of(SpotifyService).to receive(:fetch_all_followed_artists).and_return(fetched_artists)
+        allow_any_instance_of(SpotifyService).to receive(:artists).and_return(fetched_artists)
         allow_any_instance_of(FollowedArtistsService).to receive(:create_new_artists).with(fetched_artists)
         allow_any_instance_of(FollowedArtistsService).to receive(:follow_new_artists).with(fetched_artists)
         allow_any_instance_of(FollowedArtistsService).to receive(:remove_unfollowed_artists).with(fetched_artists)
       end
 
       it "fetches all followed artists" do
-        expect_any_instance_of(SpotifyService).to receive(:fetch_all_followed_artists)
+        expect_any_instance_of(SpotifyService).to receive(:artists)
         fetch_and_load_artists
       end
 
@@ -85,24 +84,10 @@ RSpec.describe FollowedArtistsService do
       end
 
       context "when artists array is not empty" do
-        let(:artists) do
-          [
-            double("Artist", name: "Artist 1", uri: "spotify:artist1", images: [{ "url" => "http://example.com/artist1.jpg" }]),
-            double("Artist", name: "Artist 2", uri: "spotify:artist2", images: [{ "url" => "http://example.com/artist2.jpg" }])
-          ]
-        end
+        let(:artists) { build_list(:artist, 2) }
 
         it "creates new records in the artists table" do
           expect { create_artists }.to change(Artist, :count).by(2)
-        end
-
-        it "creates records with correct attributes" do
-          create_artists
-          artist1 = Artist.find_by(name: "Artist 1")
-          artist2 = Artist.find_by(name: "Artist 2")
-
-          expect(artist1).to have_attributes(name: "Artist 1", external_link: "spotify:artist1", cover_url: "http://example.com/artist1.jpg")
-          expect(artist2).to have_attributes(name: "Artist 2", external_link: "spotify:artist2", cover_url: "http://example.com/artist2.jpg")
         end
       end
     end

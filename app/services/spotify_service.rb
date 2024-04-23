@@ -4,8 +4,6 @@ class SpotifyService
   SPOTIFY_MAX_LIMIT_PER_PAGE = 50
   MAX_LOOP = 10
 
-  attr_reader :spotify_user
-
   def initialize(spotify_user)
     @spotify_user = spotify_user
   end
@@ -24,6 +22,23 @@ class SpotifyService
   rescue => e
     Rails.logger.error("Unexpected error when fetching total followed artists from Spotify: #{e.message}")
   end
+
+  # This method fetches all followed artists of the current user from Spotify and converts them into an array of Artist objects.
+  #
+  # @return [Array<Artist>] An array containing all fetched artists.
+  def artists
+    fetched_artists = fetch_all_followed_artists
+
+    fetched_artists.map do |a|
+      Artist.new(
+        name: a.name,
+        external_link: a.uri,
+        cover_url: a.images.last&.dig("url")
+      )
+    end
+  end
+
+  private
 
   # Fetches all followed artists of the current user from Spotify.
   #
@@ -49,8 +64,6 @@ class SpotifyService
 
     artists
   end
-
-  private
 
   # Use Spotify's API to fetch a batch of followed artists for current_user
   #
