@@ -64,16 +64,11 @@ class SpotifyService
     artists
   end
 
-  # Use Spotify's API to fetch a batch of followed artists for current_user
+  # Fetches a batch of followed artists for the current user from the Spotify API.
   #
-  # @param last_artist_id [String] The ID of the last artist in the previous batch
-  # @return [RSpotify::Artist] An array of artists representing the batch of followed artists, or nil if an error occurs
-  # TODO: Improve this method by returning an array of hash with only the extracted properties we are interested in :
-  #   - name
-  #   - url
-  #   - cover
-  #   - (to come: spotify_id)
-  #   - (to come: genres)
+  # @param last_artist_id [String] The ID of the last artist in the previous batch.
+  # @return [Array<RSpotify::Artist>, nil] An array of artists representing the batch of followed artists,
+  #   or nil if an error occurs during the request.
   def fetch_batch_of_followed_artists(last_artist_id)
     @spotify_user.following(type: 'artist', limit: SPOTIFY_MAX_LIMIT_PER_PAGE, after: last_artist_id)
   rescue RestClient::ExceptionWithResponse => e
