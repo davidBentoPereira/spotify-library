@@ -53,8 +53,6 @@ class FollowedArtistsService
   # @param artists [Array<Artist>] An array containing Artist objects.
   # @return [void]
   def create_artists(artists)
-    return if artists.empty?
-
     Artist.import(artists)
   end
 
