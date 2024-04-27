@@ -18,5 +18,6 @@ FactoryBot.define do
     name { Faker::Music.band }
     external_link { Faker::Internet.url }
     cover_url { Faker::Internet.url }
+    genres { [Faker::Music.genre, Faker::Music.genre, Faker::Music.genre].uniq }
   end
 end

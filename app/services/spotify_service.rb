@@ -31,7 +31,8 @@ class SpotifyService
       Artist.new(
         name: a.name,
         external_link: a.uri,
-        cover_url: a.images.last&.dig("url")
+        cover_url: a.images.last&.dig("url"),
+        genres: a.genres,
       )
     end
   end
