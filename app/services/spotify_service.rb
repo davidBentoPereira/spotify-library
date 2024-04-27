@@ -2,7 +2,6 @@ require 'open-uri'
 
 class SpotifyService
   SPOTIFY_MAX_LIMIT_PER_PAGE = 50
-  MAX_LOOP = 10
 
   def initialize(spotify_user)
     @spotify_user = spotify_user
@@ -46,6 +45,7 @@ class SpotifyService
   #
   # @return [Array<Artist>] An array containing all fetched artists.
   def fetch_all_followed_artists
+    max_loop = (total_followed_artists / SPOTIFY_MAX_LIMIT_PER_PAGE).ceil
     artists = []
     count_loop = 0
 
@@ -57,8 +57,8 @@ class SpotifyService
       # Break the loop if:
       # - The batch of fetched artists is empty.
       # - The total number of fetched artists exceeds or equals the total number of followed artists.
-      # - The maximum loop count exceeds 100.
-      break if batch_of_fetched_artists.empty? || artists.size >= total_followed_artists || count_loop > MAX_LOOP
+      # - The maximum loop count exceeds max_loop.
+      break if batch_of_fetched_artists.empty? || artists.size >= total_followed_artists || count_loop > max_loop
     end
 
     artists

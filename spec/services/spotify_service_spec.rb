@@ -48,6 +48,7 @@ RSpec.describe SpotifyService do
         allow(service).to receive(:fetch_batch_of_followed_artists).with(nil).and_return(fetched_artists_batch1)
         allow(service).to receive(:fetch_batch_of_followed_artists).with('456').and_return(fetched_artists_batch2)
         allow(service).to receive(:fetch_batch_of_followed_artists).with('789').and_return(fetched_artists_batch3)
+        stub_const("SpotifyService::SPOTIFY_MAX_LIMIT_PER_PAGE", 2)
       end
 
       it 'fetches all followed artists from Spotify' do
@@ -70,8 +71,7 @@ RSpec.describe SpotifyService do
       end
 
       it 'stops fetching if maximum loop count is exceeded' do
-        stub_const("SpotifyService::MAX_LOOP", -1)
-        expect(service).to receive(:fetch_batch_of_followed_artists).once
+        expect(service).to receive(:fetch_batch_of_followed_artists).twice
         fetch_all_followed_artists
       end
     end
