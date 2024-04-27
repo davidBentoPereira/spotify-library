@@ -12,7 +12,9 @@
       <p class='my-5 text-white'>You're logged in 🤘 ! Now, connect your Spotify account 🚀</p>
       <%= link_to 'Sign in with Spotify', '/auth/spotify', method: :post, class: "rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
     <% else %>  <!-- WHEN USER IS SIGNED AND HAS SPOTIFY DATA -->
-      <h3 class='text-xl text-white'></h3>
+
+      <!-- Filter by genres -->
+      <%= render "spotify/followed_artists/filter_by_genres" %>
 
       <div data-controller="tag" class='flex items-center justify-around'>
         <!-- Tags -->
