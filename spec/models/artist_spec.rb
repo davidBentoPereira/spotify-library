@@ -5,6 +5,7 @@
 #  id            :uuid             not null, primary key
 #  cover_url     :string           not null
 #  external_link :string           not null
+#  genres        :text
 #  name          :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
