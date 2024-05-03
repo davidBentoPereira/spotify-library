@@ -117,3 +117,5 @@ gem "sidekiq", "~> 7.2", ">= 7.2.2"
 gem "acts-as-taggable-on", "~> 10.0"
 # Icons
 gem "heroicon", "~> 1.0"
+# A library for bulk inserting data using ActiveRecord.
+gem "activerecord-import", "~> 1.6"

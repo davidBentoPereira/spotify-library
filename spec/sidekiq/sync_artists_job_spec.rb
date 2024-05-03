@@ -5,9 +5,9 @@ RSpec.describe FetchArtistsJob, type: :job do
     let(:user) { create(:user) }
 
     it "calls SpotifyService to fetch the followed artists of the current user" do
-      spotify_service_double = instance_double(SpotifyService)
-      allow(SpotifyService).to receive(:new).with(user).and_return(spotify_service_double)
-      expect(spotify_service_double).to receive(:fetch_and_load_artists)
+      followed_artist_double = instance_double(FollowedArtistsService)
+      allow(FollowedArtistsService).to receive(:new).with(user).and_return(followed_artist_double)
+      expect(followed_artist_double).to receive(:fetch_and_load_artists)
 
       FetchArtistsJob.new.perform(user.id)
     end
