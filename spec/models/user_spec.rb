@@ -108,5 +108,38 @@ RSpec.describe User, type: :model do
         end
       end
     end
+
+    describe "#genres" do
+      let(:user) { create(:user) }
+
+      subject(:genres) { user.genres }
+
+      context "when user has followed artists with genres" do
+        let(:artist1) { create(:artist, genres: %w[Pop Rock]) }
+        let(:artist2) { create(:artist, genres: %w[Pop Rap]) }
+        let(:user) { create(:user) }
+
+        before do
+          user.artists << [artist1, artist2]
+          user.save!
+        end
+
+        it "displays the genres" do
+          expect(genres).to contain_exactly("Pop", "Rock", "Rap")
+        end
+      end
+
+      context "when user has no followed artists" do
+        it "returns an empty array" do
+          expect(genres).to be_empty
+        end
+      end
+
+      context "when user has followed artists with no genres" do
+        it "returns an empty array" do
+          expect(genres).to be_empty
+        end
+      end
+    end
   end
 end

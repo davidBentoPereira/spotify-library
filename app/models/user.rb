@@ -54,4 +54,8 @@ class User < ApplicationRecord
 
     self.owned_tags.reload
   end
+
+  def genres
+    self.artists.pluck(:genres).flatten.uniq
+  end
 end
