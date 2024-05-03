@@ -10,13 +10,24 @@ module Spotify
 
       followed_artists_query = current_user.followed_artists.includes(:artist)
       @followed_artists =
-        if params[:filter].present?
-          followed_artists_query.tagged_with(followed_artist_params[:filter]).order("artists.name ASC").page(@page).per(@limit)
+        if followed_artist_params[:tag].present?
+          followed_artists_query.tagged_with(followed_artist_params[:tag]).order("artists.name ASC").page(@page).per(@limit)
+        elsif followed_artist_params[:genres].present?
+          # TODO: For now, we only filter on the first genre
+          @genres = followed_artist_params[:genres].reject(&:empty?).first
+          followed_artists_query.where("artists.genres ILIKE ?", "%#{@genres}%").order("artists.name ASC").page(@page).per(@limit)
+        elsif followed_artist_params[:tag].present? && followed_artist_params[:genres].present?
+          followed_artists_query
+            .tagged_with(followed_artist_params[:tag])
+            .where("artists.genres ILIKE ?", "%#{@genres}%")
+            .order("artists.name ASC").page(@page).per(@limit)
         else
           followed_artists_query.order("artists.name ASC").page(@page).per(@limit)
         end
 
-      @total_count = @followed_artists.total_count.to_i
+      @total_count = current_user.artists.count
+      # TODO: Unused for now; but should be used to display the count of displayed artists after filtering
+      @current_count = @followed_artists.total_count.to_i
       @total_pages = @followed_artists.total_pages.to_i
     end
 
@@ -37,7 +48,7 @@ module Spotify
     # Only allow to update the tags on a followed_artist
     def update
       @followed_artist = FollowedArtist.find(params[:id])
-      tags = params[:followed_artist][:tag_list].reject(&:blank?).join(", ").strip
+      tags = params[:followed_artist][:tag_list].compact_blank.join(", ").strip
 
       if current_user.tag(@followed_artist, :with => tags, :on => :tags)
         redirect_to spotify_followed_artists_path
@@ -49,7 +60,7 @@ module Spotify
     private
 
     def followed_artist_params
-      params.permit(:tag_list, :page, :limit, :filter)
+      params.permit(:tag_list, :page, :limit, :tag, genres: [])
     end
   end
 end

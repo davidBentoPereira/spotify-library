@@ -14,7 +14,7 @@
     <% else %>  <!-- WHEN USER IS SIGNED AND HAS SPOTIFY DATA -->
 
       <!-- Filter by genres -->
-      <%= render "spotify/followed_artists/filter_by_genres" %>
+      <%= render "spotify/followed_artists/filter_by_genres", genres: @genres %>
 
       <div data-controller="tag" class='flex items-center justify-around'>
         <!-- Tags -->

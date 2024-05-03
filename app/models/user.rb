@@ -56,6 +56,6 @@ class User < ApplicationRecord
   end
 
   def genres
-    self.artists.pluck(:genres).flatten.uniq
+    self.artists.pluck(:genres).sort.flatten.uniq
   end
 end

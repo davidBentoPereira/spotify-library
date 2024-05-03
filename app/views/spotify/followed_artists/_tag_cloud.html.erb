@@ -5,7 +5,7 @@
   <% end %>
   <!-- "Dynamic" Tags -->
   <% tag_cloud(tags, badge_css_classes) do |tag, css_class| %>
-    <%= link_to spotify_followed_artists_path(filter: tag.name) do %>
+    <%= link_to spotify_followed_artists_path(tag: tag.name) do %>
       <button class="<%= css_class %> mb-2"><%= "#{tag.name} (#{tag.taggings_count})" %></button>
     <% end %>
   <% end %>
