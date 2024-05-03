@@ -78,17 +78,17 @@ RSpec.describe SpotifyService do
 
     describe "#artists" do
       context "when there are some fetched_artists" do
-        let(:artist1) { double('RSpotify::Artist', name: "Artist 1", uri: "spotify:artist1", images: [{ "url" => "https://artist1.jpg" }]) }
-        let(:artist2) { double('RSpotify::Artist', name: "Artist 2", uri: "spotify:artist2", images: [{ "url" => "https://artist2.jpg" }]) }
+        let(:artist1) { double('RSpotify::Artist', name: "Artist 1", uri: "spotify:artist1", images: [{ "url" => "https://artist1.jpg" }], genres: %w[rock pop]) }
+        let(:artist2) { double('RSpotify::Artist', name: "Artist 2", uri: "spotify:artist2", images: [{ "url" => "https://artist2.jpg" }], genres: %w[rock rap]) }
         let(:fetched_artists) { [artist1, artist2] }
 
         before { allow(service).to receive(:fetch_all_followed_artists).and_return(fetched_artists) }
 
         it "returns an array of Artist objects" do
           expect(service.artists.first).to be_an(Artist)
-          expect(service.artists.first).to have_attributes(name: "Artist 1", external_link: "spotify:artist1", cover_url: "https://artist1.jpg")
+          expect(service.artists.first).to have_attributes(name: "Artist 1", external_link: "spotify:artist1", cover_url: "https://artist1.jpg", genres: %w[rock pop])
           expect(service.artists.last).to be_an(Artist)
-          expect(service.artists.last).to have_attributes(name: "Artist 2", external_link: "spotify:artist2", cover_url: "https://artist2.jpg")
+          expect(service.artists.last).to have_attributes(name: "Artist 2", external_link: "spotify:artist2", cover_url: "https://artist2.jpg", genres: %w[rock rap])
         end
       end
     end
