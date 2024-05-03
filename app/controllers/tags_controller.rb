@@ -1,5 +1,4 @@
 class TagsController < ApplicationController
-  before_action :load_tag, only: [:destroy]
   # def new
   #   # TODO: Allow to create a tag with a name and a colour and associate it to the user
   # end
@@ -15,11 +14,11 @@ class TagsController < ApplicationController
   # def update
   #   # TODO: Allow to rename a tag and give it a colour
   # end
-  
-  def destroy
-    current_user.delete_tags(@tag)
 
-    if current_user.delete_tags(tag_params[:tag])
+  def destroy
+    load_tag
+
+    if current_user.delete_tags(@tag)
       redirect_to spotify_followed_artists_path
     else
       render spotify_followed_artists_path, status: :unprocessable_entity
@@ -33,6 +32,6 @@ class TagsController < ApplicationController
   end
 
   def tag_params
-    params.permit(:id, :tag)
+    params.permit(:id)
   end
 end

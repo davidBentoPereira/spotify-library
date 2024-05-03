@@ -46,7 +46,8 @@ class SpotifyService
   #
   # @return [Array<Artist>] An array containing all fetched artists.
   def fetch_all_followed_artists
-    max_loop = (total_followed_artists / SPOTIFY_MAX_LIMIT_PER_PAGE).ceil
+    total_artists = total_followed_artists
+    max_loop = (total_artists / SPOTIFY_MAX_LIMIT_PER_PAGE).ceil
     artists = []
     count_loop = 0
 
@@ -59,7 +60,7 @@ class SpotifyService
       # - The batch of fetched artists is empty.
       # - The total number of fetched artists exceeds or equals the total number of followed artists.
       # - The maximum loop count exceeds max_loop.
-      break if batch_of_fetched_artists.empty? || artists.size >= total_followed_artists || count_loop > max_loop
+      break if batch_of_fetched_artists.empty? || artists.size >= total_artists || count_loop > max_loop
     end
 
     artists
