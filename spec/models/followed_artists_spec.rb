@@ -27,6 +27,14 @@ RSpec.describe FollowedArtist, type: :model do
     it "is valid" do
       expect(followed_artist).to be_valid
     end
+
+    context "with a folder" do
+      let(:followed_artist) { build(:followed_artist, :with_folder) }
+
+      it "is valid" do
+        expect(followed_artist).to be_valid
+      end
+    end
   end
 
   context "with invalid attributes" do

@@ -40,5 +40,9 @@ FactoryBot.define do
         followed_artist.save
       end
     end
+
+    trait :with_folder do
+      folder { create(:folder, user: user) }
+    end
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_16_073826) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_16_083948) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -65,7 +65,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_16_073826) do
     t.uuid "artist_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "folder_id"
     t.index ["artist_id"], name: "index_followed_artists_on_artist_id"
+    t.index ["folder_id"], name: "index_followed_artists_on_folder_id"
     t.index ["user_id"], name: "index_followed_artists_on_user_id"
   end
 
@@ -118,6 +120,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_16_073826) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "folders", "users"
   add_foreign_key "followed_artists", "artists"
+  add_foreign_key "followed_artists", "folders"
   add_foreign_key "followed_artists", "users"
   add_foreign_key "taggings", "tags"
 end
