@@ -25,6 +25,7 @@ class User < ApplicationRecord
 
   has_many :followed_artists, dependent: :destroy # TODO: not 100% sure about that
   has_many :artists, through: :followed_artists
+  has_many :folders, dependent: :destroy
 
   acts_as_tagger
 
